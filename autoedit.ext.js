@@ -36,4 +36,23 @@ infrajs.autoedit_SaveOpenedWin=function(){
 }
 
 
+infra.wait(infrajs,'oninit',function(){
+	//autoedit
+	infrajs.autoeditInit();	
+});
 
+infra.listen(infrajs,'onshow',function(){
+	//autoedit
+	infrajs.autoeditLink();
+});
+infra.listen(infrajs,'onshow',function(){
+	//autoedit
+	if(!window.AUTOEDIT)return;
+	if(!AUTOEDIT.active)return;
+	if(!infra.admin())return;
+	AUTOEDIT.setHandlers();
+});
+infra.listen(infrajs,'onshow',function(){
+	//autoedit
+	infrajs.autoedit_SaveOpenedWin();
+});
