@@ -365,7 +365,8 @@
 				if($ans['rteable']){
 					$ans['rteable']=in_array(strtolower($ans['ext']),$RTEABLE);
 				}
-				$imgext=array('jpg','png','gif','jpeg');
+				$conf=infra_config();
+				$imgext=$conf['imager']['images'];
 				infra_forr($imgext,function&($e) use(&$ans){
 					if($e==$ans['ext'])$ans['image']=true;//Значит это картинка
 					$r=null;return $r;
