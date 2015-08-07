@@ -27,7 +27,7 @@
 						var request = new XMLHttpRequest();
 
 						request.onreadystatechange=function(){
-						    if (request.readyState !== 4) return;
+							if (request.readyState !== 4) return;
 							var header=request.getResponseHeader('infrajs-cache');
 							console.log(request.getAllResponseHeaders());
 							window.checkcacheres=(header!='Fail');

@@ -1,150 +1,155 @@
-<?php 
+<?php
+
 /*
 Copyright 2008-2010 http://itlife-studio.ru
 
 */
-	
-	require_once(__DIR__.'/../infra/infra.php');
-	if(!function_exists('file_download')){
-		function infra_download_browser($agent=false){
-			if(!$agent)$agent=$_SERVER['HTTP_USER_AGENT'];
-			$agent=strtolower($agent);
-			$name=infra_once('infra_imager_browser',function($agent){
-				if (preg_match('/msie (\d)/', $agent,$matches)) {
+
+require_once __DIR__.'/../infra/infra.php';
+	if (!function_exists('file_download')) {
+		function infra_download_browser($agent = false)
+		{
+			if (!$agent) {
+				$agent = $_SERVER['HTTP_USER_AGENT'];
+			}
+			$agent = strtolower($agent);
+			$name = infra_once('infra_imager_browser', function ($agent) {
+				if (preg_match('/msie (\d)/', $agent, $matches)) {
 					$name = 'ie ie'.$matches[1];
-				}elseif (preg_match('/opera/', $agent)) {
+				} elseif (preg_match('/opera/', $agent)) {
 					$name = 'opera';
-					if(preg_match('/opera\/9/', $agent)) {
-						$name.=' opera9';
-					}else if(preg_match('/opera (\d)/', $agent,$matches)){
-						$name.=' opera'.$mathces[1];
+					if (preg_match('/opera\/9/', $agent)) {
+						$name .= ' opera9';
+					} elseif (preg_match('/opera (\d)/', $agent, $matches)) {
+						$name .= ' opera'.$mathces[1];
 					}
-					if(preg_match('/opera\smini/', $agent)) {
-						$name.=' opera_mini';
+					if (preg_match('/opera\smini/', $agent)) {
+						$name .= ' opera_mini';
 					}
-				}elseif (preg_match('/gecko\//', $agent)){
-					$name='gecko';
-					if (preg_match('/firefox/', $agent)){
+				} elseif (preg_match('/gecko\//', $agent)) {
+					$name = 'gecko';
+					if (preg_match('/firefox/', $agent)) {
 						$name .= ' ff';
-						if (preg_match('/firefox\/2/', $agent)){
+						if (preg_match('/firefox\/2/', $agent)) {
 							$name .= ' ff2';
-						}elseif (preg_match('/firefox\/3/', $agent)){
+						} elseif (preg_match('/firefox\/3/', $agent)) {
 							$name .= ' ff3';
 						}
 					}
-				}elseif (preg_match('/webkit/', $agent)) {
+				} elseif (preg_match('/webkit/', $agent)) {
 					$name = 'webkit';
 					if (preg_match('/chrome/', $agent)) {
 						$name .= ' chrome';
-					}else{
+					} else {
 						$name .= ' safari';
 					}
-				}elseif (preg_match('/konqueror/', $agent)) {
-					$name='konqueror';
-				}elseif (preg_match('/flock/', $agent)) {
-					$name='flock';
-				}else{
-					$name='stranger';
+				} elseif (preg_match('/konqueror/', $agent)) {
+					$name = 'konqueror';
+				} elseif (preg_match('/flock/', $agent)) {
+					$name = 'flock';
+				} else {
+					$name = 'stranger';
 				}
-				if (!preg_match('/ie/', $name)){
-					$name.=' noie';
+				if (!preg_match('/ie/', $name)) {
+					$name .= ' noie';
 				}
 				if (preg_match('/linux|x11/', $agent)) {
-				   $name.=' linux';
-				}elseif (preg_match('/macintosh|mac os x/', $agent)) {
-				    $name.=' mac';
-				}elseif (preg_match('/windows|win32/', $agent)) {
-				    $name.=' win';
+					$name .= ' linux';
+				} elseif (preg_match('/macintosh|mac os x/', $agent)) {
+					$name .= ' mac';
+				} elseif (preg_match('/windows|win32/', $agent)) {
+					$name .= ' win';
 				}
-				if(preg_match('/stranger/',$name)){
-					$name='';
+				if (preg_match('/stranger/', $name)) {
+					$name = '';
 				}
+
 				return $name;
-			},array($agent));
+			}, array($agent));
+
 			return $name;
 		}
-		function file_download($filename, $mimetype='application/octet-stream') {
+		function file_download($filename, $mimetype = 'application/octet-stream')
+		{
 			//thanks http://shaman.asiadata.ru/node/217
-			if(file_exists($filename)){
-
-				
-				$br=infra_download_browser();
-				$name=preg_replace("/(.*\/)*/",'',$filename);
+			if (file_exists($filename)) {
+				$br = infra_download_browser();
+				$name = preg_replace("/(.*\/)*/", '', $filename);
 				//$name=infra_tofs($name);
-				$name=infra_toutf($name);
-				if(!preg_match('/ff/',$br)){
-					$name=rawurlencode($name);
+				$name = infra_toutf($name);
+				if (!preg_match('/ff/', $br)) {
+					$name = rawurlencode($name);
 				}
 				//$name=preg_replace("/ё/",'e',$name);
-				if(preg_match('/chrome/',$br)){
-					$name=preg_replace('/%40/','@',$name);
+				if (preg_match('/chrome/', $br)) {
+					$name = preg_replace('/%40/', '@', $name);
 				}
-				if(preg_match('/ie6/',$br)){
-					$name=preg_replace("/\s/",'%20',$name);
+				if (preg_match('/ie6/', $br)) {
+					$name = preg_replace("/\s/", '%20', $name);
 				}
 
-
-				header($_SERVER["SERVER_PROTOCOL"] . ' 200 OK');
+				header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
 				header('Content-Type: '.$mimetype);
-				header('Last-Modified: ' . gmdate('r', filemtime($filename)));
-				header('ETag: ' . sprintf('%x-%x-%x', fileinode($filename), filesize($filename), filemtime($filename)));
-				header('Content-Length: ' . (filesize($filename)));
+				header('Last-Modified: '.gmdate('r', filemtime($filename)));
+				header('ETag: '.sprintf('%x-%x-%x', fileinode($filename), filesize($filename), filemtime($filename)));
+				header('Content-Length: '.(filesize($filename)));
 				header('Connection: close');
 				header('Content-Disposition: attachment; filename="'.$name.'";');
 			// Открываем искомый файл
-				$f=fopen($filename, 'r');
-				while(!feof($f)) {
-			// Читаем килобайтный блок, отдаем его в вывод и сбрасываем в буфер
+				$f = fopen($filename, 'r');
+				while (!feof($f)) {
+					// Читаем килобайтный блок, отдаем его в вывод и сбрасываем в буфер
 				  echo fread($f, 1024);
-				  flush();
+					flush();
 				}
 			// Закрываем файл
 				fclose($f);
-		  } else {
-			header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-			header('Status: 404 Not Found');
-		  }
+			} else {
+				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+				header('Status: 404 Not Found');
+			}
 		}
 	}
-	$file=urldecode($_SERVER['QUERY_STRING']);
+	$file = urldecode($_SERVER['QUERY_STRING']);
 
-	$set='fn';
-	$path=infra_theme($file,$set);
-	if(!$path){//Нет не скрытого файла
-		$r=infra_admin();
-		if(!$r){
-			header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+	$set = 'fn';
+	$path = infra_theme($file, $set);
+	if (!$path) {
+		//Нет не скрытого файла
+		$r = infra_admin();
+		if (!$r) {
+			header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 			header('Status: 404 Not Found');
 			exit;
-		}else{
-			$set='fns';
-			$path=infra_theme($file,$set);
+		} else {
+			$set = 'fns';
+			$path = infra_theme($file, $set);
 		}
 	}
-	if(!$path){
-		header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+	if (!$path) {
+		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 		header('Status: 404 Not Found');
 		exit;
-	}else{
-		$ext=false;
-		$dyn=preg_match('/\?/',$path);
-		if(!$dyn){
-			preg_match('/.*\.(.*)$/','.'.$path,$match);
-			$ext=mb_strtolower($match[1]);
+	} else {
+		$ext = false;
+		$dyn = preg_match('/\?/', $path);
+		if (!$dyn) {
+			preg_match('/.*\.(.*)$/', '.'.$path, $match);
+			$ext = mb_strtolower($match[1]);
 
-			$file_types_user= array( 
-				'gif'=>'image/gif',
-				'jpg' =>'image/jpeg',
-				'jpeg'=>'image/jpeg',
-				"rtf" => "text/rtf",
-				'png' =>'image/png',
-				'mht' =>'application/msword',
-				'doc' =>'application/msword',
-				'docx' =>'application/msword',
-				"avi" => "video/x-msvideo",
-				"xls" => "application/msexcel",
-				"tpl" => "text/html",
-				"html" => "text/html",
+			$file_types_user = array(
+				'gif' => 'image/gif',
+				'jpg' => 'image/jpeg',
+				'jpeg' => 'image/jpeg',
+				'rtf' => 'text/rtf',
+				'png' => 'image/png',
+				'mht' => 'application/msword',
+				'doc' => 'application/msword',
+				'docx' => 'application/msword',
+				'avi' => 'video/x-msvideo',
+				'xls' => 'application/msexcel',
+				'tpl' => 'text/html',
+				'html' => 'text/html',
 
 				'txt' => 'text/plain',
 				'htm' => 'text/html',
@@ -198,21 +203,21 @@ Copyright 2008-2010 http://itlife-studio.ru
 
 				// open office
 				'odt' => 'application/vnd.oasis.opendocument.text',
-				'ods' => 'application/vnd.oasis.opendocument.spreadsheet'
+				'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
 			);
-			$file_types_admin= array( 
+			$file_types_admin = array(
 				'php' => 'text/html',
 			);
 		}
-		if(!$dyn&&$ext&&$file_types_user[$ext]){
+		if (!$dyn && $ext && $file_types_user[$ext]) {
 			//header( "Content-type: ".$file_types[$ext] ) ;
 			//header( "Last-Modified: ".gmdate("D, d M Y H:i:s",filemtime($path))." GMT" );
-			file_download($path,$file_types_user[$ext]);
-		}else{
+			file_download($path, $file_types_user[$ext]);
+		} else {
 			infra_admin(true);
-			if(!$dyn&&$ext&&$file_types_admin[$ext]){
-				file_download($path,$file_types_admin[$ext]);
-			}else{
+			if (!$dyn && $ext && $file_types_admin[$ext]) {
+				file_download($path, $file_types_admin[$ext]);
+			} else {
 				die('Исключение');
 			}
 		}
