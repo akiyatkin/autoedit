@@ -61,9 +61,15 @@
 		<tr style="display:{data.admin?:none?}">
 			<td style="vertical-align:middle;">Пароль&nbsp;</td><td><input type="password" name="pass" value=""></td></tr>
 	{adminmenu:}
-		{AUTOEDIT.menu::adminmenuitem}
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="list-group">
+					{AUTOEDIT.menu::adminmenuitem}
+				</div>
+			</div>
+		</div>
 	{adminmenuitem:}
-		<span class="a" onclick="AUTOEDIT.menu[{$key}].click()">{name}</span><br>
+		 <button type="button" class="list-group-item" onclick="AUTOEDIT.menu[{$key}].click()">{name}</button>
 	{adminhelp:}
 		<table>
 			<tr>
@@ -136,11 +142,15 @@
 	{takeshow2:}
 		{files.length?:listshow?:nolistshow}
 		{listshow:}
-			<table style="font-size:12px">
-			<tr>
-				<td></td><th>Файл</th><th>Дата отметки</th><th>Дата изменения</th><th>IP</th>
-			</tr>
+			<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<td></td><th>Файл</th><th>Дата отметки</th><th>Дата изменения</th><th>IP</th>
+				</tr>
+			</thead>
+			<tbody>
 				{files::listtakefiles}
+			</tbody>
 			</table>
 		{listtakefiles:}
 			<tr>
@@ -161,7 +171,7 @@
 		<input type="hidden" name="folder" value="{folder}">
 		<table class="param">
 			<tr><td>Папка:&nbsp;</td>
-				<td><span class="a" onclick="AUTOEDIT('editfolder','{folder}')">{folder}</span></td></tr>
+				<td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{folder}')">{folder}</span></td></tr>
 			<tr><td>Файл:&nbsp;</td>
 				<td style="font-size:14px">
 					<img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"> 
@@ -178,8 +188,8 @@
 		{data.isfile?:getfile}
 		<div style="border-top:dotted 1px gray; margin-top:5px;"></div>
 		<small>{data.isfile?:editishelp?:editishelpis}</small>
-		<table style="margin-top:5px; margin-bottom:5px;">
-			<tr><td style="vertical-align:middle">{data.isfile?:Заменить?:Создать}</td>
+		<table class="table" style="margin-top:5px; margin-bottom:5px;">
+			<tr><td style="vertical-align:middle">{data.isfile?:Заменить новым?:Загрузить}</td>
 				<td><input type="file" value="Обновить" name="file"></td></tr>
 		</table>
 		{:submit}Сохранить{:/submit}
@@ -208,27 +218,28 @@
 			{data.take?:getfilebad?:getfilegood}
 		</div>
 	{getfilebad:}
-		<span style="font-weight:bold; color:red;">Файл редактируется <span onclick="AUTOEDIT('takeinfo','{config.id}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate,data.take)}</span></span><br>
-		<span onclick="AUTOEDIT.takefile('{config.id}',false);" style="cursor:pointer; text-decoration:underline">освободить файл</span> 
+		<span onclick="AUTOEDIT.takefile('{config.id}',false);" class="btn btn-default btn-xs">освободить файл</span>
+		<span style="font-weight:bold; color:red;">Файл редактируется <span onclick="AUTOEDIT('takeinfo','{config.id}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate,data.take)}</span></span>
 	{getfilegood:}
-		<span style="color:darkgreen">Файл можно редактировать</span><br>
-		<span onclick="AUTOEDIT.takefile('{config.id}',true);" style="cursor:pointer; text-decoration:underline">захватить файл</span>
+		<span onclick="AUTOEDIT.takefile('{config.id}',true);" class="btn btn-default btn-xs">захватить файл</span>
+		<span style="color:darkgreen">Файл можно редактировать</span>
+		
 	{rteable:}
 		<img alt="rte" style="cursor:pointer" onclick="AUTOEDIT('rte','{folder}{file}');" title="Визуальный редактор" src="{infra.theme(:*autoedit/images/rte.png)}">
 {takeinfo:}
 	{data.take?data:takeyes?data:takeno}
 	{takeno:} 
-		<span class="a" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span><br>
+		<span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span><br>
 		Файл свободен для редактирования<br>
-		<span class="a" onclick="popup.hide();AUTOEDIT.takefile('{data.path}',true)">Занять</span>
+		<span class="btn btn-default btn-xs" onclick="popup.hide();AUTOEDIT.takefile('{data.path}',true)">Занять</span>
 	{takeyes:}
 		<table style="font-size:12px">
-			<tr><th>Файл</th><td><img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"> <span class="a" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span></td></tr>
+			<tr><th>Файл</th><td><img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"> <span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span></td></tr>
 			<tr><th>Дата отметки</th><td>{$date(:_takedate,data.take.date)}</td></tr>
 			<tr><th>IP:</th><td>{data.take.ip|}</td></tr>
 			<tr><th>Браузер:</th><td>{data.take.browser|}</td></tr>
 		</table>
-		<span class="a" onclick="popup.hide();AUTOEDIT.takefile('{data.take.path}',false)">Освободить</span>, <span onclick="popup.alert('<div style=\'width:300px\'><b>Файл редактируется или файл занят</b> &mdash; значит, что файл был кем-то скачен и не загружен обратно. Cейчас, возможно, в файл вносятся изменения. Если этот человек не Вы настоятельно рекомендуется прежде, чем скачивать файл выяснить кто не убрал отметку о редактировании файл. Иначе Ваши изменения могут быть затёрты.</div>');" style="cursor:pointer; text-decoration:underline">помощь</span> 
+		<span class="btn btn-default btn-xs" onclick="popup.hide();AUTOEDIT.takefile('{data.take.path}',false)">Освободить</span> <span onclick="popup.op('<div style=\'width:300px\'><b>Файл редактируется или файл занят</b> &mdash; значит, что файл был кем-то скачен и сейчас в файл вносятся изменения. Если Вы не являетесь этим самым человеком необходимо выяснить кто не убрал отметку о редактировании файла. Иначе Ваши изменения могут быть затёрты.</div>');" class="btn btn-default btn-xs">помощь</span> 
 {copyfile:}
 	<h1>Создать копию файла?</h1>
 	{:form}
@@ -254,8 +265,8 @@
 		<input type="hidden" name="oldfolder" value="{data.folder}">
 		<input type="hidden" name="oldname" value="{data.name}">
 		<table>
-		<tr><td>Папка:&nbsp;</td><td><span class="a" onclick="AUTOEDIT('editfolder','{data.folder}')">{data.folder}</span></td></tr>
-		<tr><td>Файл:&nbsp;</td><td><span class="a" onclick="AUTOEDIT('editfile','{data.id}')">{data.name}</span></td></tr>
+		<tr><td>Папка:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.folder}')">{data.folder}</span></td></tr>
+		<tr><td>Файл:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{data.id}')">{data.name}</span></td></tr>
 		</table>
 {deletefile:}
 	<h1>Удалить файл?</h1>
@@ -277,12 +288,12 @@
 	{:/form}
 {editfolder:}
 	<h1>Редактирование папки</h1>
-	<b>{data.id}</b><br>
+	<div><b>{data.id}</b></div>
 	<!--<span class="a" onclick="name=prompt('Укажите имя нового файла, после этого Вы сможете его загрузить');if(name)AUTOEDIT('editfile','{data.id}'+name);">cоздать файл</span> -->
-	<span class="a" onclick="AUTOEDIT('addfile','{data.id}')">загрузить файл</span>,  
-	<span class="a" onclick="AUTOEDIT('corfile','{data.id}Новый файл.tpl')">создать файл</span>, 
-	<span class="a" onclick="AUTOEDIT('mkdir','{data.id}')">создать папку</span>
-	<table class="teditfolder table table-striped table-hover" style="margin-top:10px">
+	<span class="btn btn-default btn-xs" onclick="AUTOEDIT('addfile','{data.id}')">загрузить файл</span>
+	<span class="btn btn-default btn-xs" onclick="AUTOEDIT('corfile','{data.id}Новый файл.tpl')">создать файл</span>
+	<span class="btn btn-default btn-xs" onclick="AUTOEDIT('mkdir','{data.id}')">создать папку</span>
+	<table class="teditfolder table table-striped table-hover table-clicked" style="margin-top:10px">
 		<thead>
 			<tr onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
 				<td></td><td>Файл</td><td>Кб</td><td colspan="2">Дата&nbsp;изменения</td><td>
@@ -297,9 +308,11 @@
 	{:close}Закрыть{:/close}
 	{edftop:}
 		<tr>
-			<td><img src="{infra.theme(:*autoedit/icons/dir.png)}" title="dir"></td>
-			<td class="folder">
-				<span class="a" onclick="AUTOEDIT('editfolder','{data.parent}')">..</span>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.parent}')">
+				<img src="{infra.theme(:*autoedit/icons/dir.png)}" title="dir">
+			</td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.parent}')">
+				..
 			</td>
 			<td></td>
 			<td></td>
@@ -307,9 +320,9 @@
 		</tr>
 	{folders:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td><img src="{infra.theme(:*autoedit/icons/)}dir.png" title="dir"></td>
-			<td class="folder">
-				<span class="a" onclick="AUTOEDIT('editfolder','{data.id}{name}/')">{name}</span>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')"><img src="{infra.theme(:*autoedit/icons/)}dir.png" title="dir"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')">
+				{name}
 			</td>
 			<td>&nbsp;</td><td>{date?:date?}</td>
 			<td>
@@ -322,9 +335,9 @@
 		</tr>
 	{file:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td><img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"></td>
-			<td class="file">
-				<span class="a" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}');">{name}{ext?:point}{ext}</span>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')"><img alt="" src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')">
+				{file}
 			</td>
 			<td>{size}</td><td>{~date(:d.m.Y,date)}</td>
 			{mytake?:actions?:strtake}
@@ -332,7 +345,7 @@
 	{point:}.
 	{strtake:}
 			<td>
-				<span class="a" onclick="AUTOEDIT('takeinfo','{data.id}{name}{ext?:point}{ext}')">{$date(:_takedate,take)}</span>
+				<span class="btn btn-default btn-xs" onclick="AUTOEDIT('takeinfo','{data.id}{name}{ext?:point}{ext}')">{$date(:_takedate,take)}</span>
 			</td>
 	{actions:}
 			<td>
@@ -388,7 +401,7 @@
 	{allblockslist:}
 		{::allblock}
 	{allblock:}
-		<span class="a block{unick}">{title|layer}</span><br>
+		<span class="btn btn-default btn-xs block{unick}">{title|layer}</span> 
 {corfile:}
 	{:style}
 	{:form}
@@ -462,10 +475,10 @@
 		{:form}
 		<table style="margin-bottom:10px">
 		<tr>
-			<td>Папка:&nbsp;</td><td><span class="a" onclick="AUTOEDIT('editfolder','{data.folder}')">{data.folder}</span></td>
+			<td>Папка:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.folder}')">{data.folder}</span></td>
 		</tr>
 		<tr>
-			<td>Файл:</td><td><span class="a" onclick="AUTOEDIT('editfile','{config.id}')">{data.file}</span></td>
+			<td>Файл:</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{config.id}')">{data.file}</span></td>
 		</tr>
 		</table>
 		<div id="rte"></div>
@@ -504,10 +517,16 @@
 {/form:}
 	{:close}Отмена{:/close}
 	</form>
-	{config.ans.msg|}
-{submit:}<input style="margin-right:10px;margin-top:5px;padding:0px 10px" type="submit" value="{/submit:}">
+
+	
+		{config.ans.msg?config.ans:ansmsg}
+{ansmsg:}
+	<div style="margin-top:10px" class="alert alert-{result?:success?:danger}" role="alert">
+		{msg}
+	</div>
+{submit:}<input class="btn btn-danger" type="submit" value="{/submit:}">
 {close:}
-	<input type="button" style="margin-right:10px;margin-top:5px;padding:0px 10px" value="{/close:}" onclick="popup.hide()">
+	<input class="btn btn-default" type="button" value="{/close:}" onclick="popup.hide()">
 {style:}
 	<style>
 		#{div} {
@@ -593,7 +612,7 @@
 	<input type="hidden" name="oldfolder" value="{data.oldfolder}">
 	<input type="hidden" name="oldname" value="{data.oldname}">
 	<table style="margin-bottom:5px">
-	<tr><td>Каталог:&nbsp;</td><td><span class="a" onclick="AUTOEDIT('editfolder','{data.oldfolder}')">{data.oldfolder}</span></td></tr>
+	<tr><td>Каталог:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.oldfolder}')">{data.oldfolder}</span></td></tr>
 	{data.oldname:infofile_1}
 	</table>
 {infofile_1:}<tr><td>Файл:</td><td><b>{.}</b></td></tr>
@@ -601,10 +620,10 @@
 	<input type="hidden" name="oldfolder" value="{data.oldfolder}">
 	<input type="hidden" name="oldname" value="{data.oldname}">
 	<table>
-	<tr><td>Каталог:&nbsp;</td><td><span class="a" onclick="AUTOEDIT('editfolder','{data.oldfolder}')">{data.oldfolder}</span></td></tr>
+	<tr><td>Каталог:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.oldfolder}')">{data.oldfolder}</span></td></tr>
 	{data.oldname:infofoldername}
 	</table>
-	{infofoldername:}<tr><td></td><td><b><span class="a" onclick="AUTOEDIT('editfolder','{data.oldfolder}{data.oldname}/')">{data.oldname}</span></b></td></tr>
+	{infofoldername:}<tr><td></td><td><b><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.oldfolder}{data.oldname}/')">{data.oldname}</span></b></td></tr>
 {fullpath:}
 	<div style="margin:5px 0">
 		<input type="checkbox" name="full" onclick="popup.reparse();"> — задать новый полный путь<br>

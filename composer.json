@@ -8,5 +8,9 @@
 	}],
 	"autoload": {
 		"psr-4": { "itlife\\autoedit\\": "/" }
+	},
+	"require":{
+		"itlife/infrajs":"~1",
+		"itlife/imager":"~1"
 	}
 }

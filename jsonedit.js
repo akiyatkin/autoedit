@@ -1391,6 +1391,7 @@ jsonwidget.editor.debugOut = function (level, text) {
 }
 
 jsonwidget.editor.warningOut = function (text) {
+	if(!this.warningwindow)return;
 	this.warningwindow.innerHTML += text+"<br/>\n";
 }
 

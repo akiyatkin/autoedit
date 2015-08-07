@@ -57,6 +57,7 @@
 	}
 	function autoedit_takepath($file = false)
 	{
+		$dirs=infra_dirs();
 		$takepath = $dirs['cache'].'admin_takefiles/';
 		if ($file === false) {
 			return $takepath;
