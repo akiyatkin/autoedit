@@ -337,16 +337,18 @@
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')"><img alt="" src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"></td>
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')">
-				{file}
+				{file}{:strtake}
 			</td>
 			<td>{size}</td><td>{~date(:d.m.Y,date)}</td>
-			{mytake?:actions?:strtake}
+			{mytake?:actions}
 		</tr>
 	{point:}.
 	{strtake:}
 			<td>
-				<span class="btn btn-default btn-xs" onclick="AUTOEDIT('takeinfo','{data.id}{name}{ext?:point}{ext}')">{$date(:_takedate,take)}</span>
+				{take?:strtakenow}
 			</td>
+	{strtakenow:}
+		<span class="btn btn-xs {mytake?:btn-warning?:btn-danger}" onclick="AUTOEDIT('takeinfo','{data.id}{name}{ext?:point}{ext}')">{~date(:_takedate,take)}</span>
 	{actions:}
 			<td>
 				<nobr class="action" style="visibility:hidden">

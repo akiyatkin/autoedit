@@ -393,7 +393,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			return infra_err($ans, 'Не найдена папка');
 		}
 	} else {
-		$file = infra_theme($id);//Можно указывать путь без расришения
+		$file = autoedit_theme($id);//Можно указывать путь без расришения (Для админки которая не знает что будет за файл
 		$ans['path'] = $id;
 		if (!$file) {
 			$ans['take'] = false;
@@ -460,17 +460,17 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		
 
 		$ans['pathload'] = '?*autoedit/download.php?'.infra_toutf($id);
-		$ans['path'] = infra_theme($id);
 		$ans['path'] = infra_toutf($ans['path']);
 	}
 } elseif ($type == 'takeinfo') {
-	$file = infra_theme($id);
+	$file = autoedit_theme($id);
 	$takepath = autoedit_takepath($file);
 	$take = infra_loadJSON($takepath);
+
 	$ans['path'] = $id;
 	$ans['take'] = $take;
-	preg_match("/\.([a-zA-Z]+)$/", $id, $match);
-	$ans['ext'] = strtolower($match[1]);
+	$fd=infra_nameinfo($file);
+	$ans['ext'] = $fd['ext'];
 } elseif ($type === 'editfolder') {
 	if (!$submit) {
 		$folder = $id;
@@ -482,10 +482,13 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		array_pop($p);//'name/'
 		$parent = implode('/', $p).'/';// *Разделы/
 
-		$parent = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '*', $parent);
-		$ans['parent'] = $parent;
 
-		$folder = infra_theme($id);
+		$parentN = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '*', $parent);
+		if ($parentN!=$parent) {
+			$ans['parent'] = $parentN;
+		}
+
+		$folder = autoedit_theme($id);
 		if ($folder && !is_dir($folder)) {
 			return infra_err($ans, 'Нет такой папки');
 		}
@@ -522,13 +525,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$takepath = autoedit_takepath($file);
 				$d = infra_loadJSON($takepath);
 				$v['corable'] = in_array(strtolower($v['ext']), $CORABLE);
-				$v['rteable'] = in_array(strtolower($v['ext']), $RTEABLE);
 
 				$v['pathload'] = infra_theme('*autoedit/download.php?'.$file);
 				$v['pathload'] = infra_toutf($v['pathload']);
-				if ($v['rteable']) {
-					$ans['rteable'] = (bool) infra_theme('infra/lib/wymeditor/');
-				}
+				
 				$v['mytake'] = autoedit_ismytake($file);
 				if ($d) {
 					$v['take'] = $d['date'];
@@ -710,7 +710,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	if ($submit) {
 		$take = (bool) $_GET['take'];
 		$ans['take'] = $take;
-		$file = infra_theme($id, 'sfn');
+		$file = autoedit_theme($id);
 		$file = infra_toutf($file);
 		if (!$file) {
 			$ans['noaction'] = true;//Собственно всё осталось как было
