@@ -134,7 +134,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 
 				return infra_ret($ans, 'Директория удалена.');
 			} else {
-				return infra_ret($ans, 'Ошибка. Папка не удалена.');
+				return infra_ret($ans, 'Ошибка. Папка не удалена. Вероятно она не пустая.');
 			}
 		}
 	}
@@ -179,9 +179,9 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			if (is_string($msg)) {
 				return infra_err($ans, $msg);
 			}
-			$r = unlink($file);
+			$r = @unlink($file);
 			if (!$r) {
-				return infra_err($ans, 'Неудалось удалить файл');
+				return infra_err($ans, 'Неудалось удалить файл. Возможно нет прав, если это скрытый файл в windows.');
 			}
 		} elseif ($type == 'renamefile' || $type == 'copyfile') {
 			$oldfolder = infra_theme($_REQUEST['oldfolder']);
