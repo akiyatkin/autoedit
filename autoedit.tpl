@@ -28,9 +28,9 @@
 
 						request.onreadystatechange=function(){
 							if (request.readyState !== 4) return;
-							var header=request.getResponseHeader('infrajs-cache');
+							var header=request.getResponseHeader('Infrajs-Cache');
 							console.log(request.getAllResponseHeaders());
-							window.checkcacheres=(header!='Fail');
+							window.checkcacheres=(header=='true');
 							callback(window.checkcacheres);
 						};
 						request.open('HEAD', document.location, true);
