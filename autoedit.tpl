@@ -352,10 +352,11 @@
 	{actions:}
 			<td>
 				<nobr class="action" style="visibility:hidden">
-					<a href="{pathload}"><img alt="load" title="Скачать" src="{infra.theme(:*autoedit/images/floppy.png)}"></a>
-					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{name}{ext?:point}{ext|}')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
-					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{name}{ext?:point}{ext|}')" title="Переименовать/переместить" src="{infra.theme(:*autoedit/images/rename.png)}">
-					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{name}{ext?:point}{ext|}')" title="Создать копию" src="{infra.theme(:*autoedit/images/copy.png)}"> 
+					<a href="{pathload}"><img alt="load" 
+					title="Скачать" src="?*autoedit/images/floppy.png"></a>
+					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{file}')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
+					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{file}')" title="Переименовать/переместить" src="{infra.theme(:*autoedit/images/rename.png)}">
+					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{file}')" title="Создать копию" src="{infra.theme(:*autoedit/images/copy.png)}"> 
 					{corable?:cancorfile}
 					{rteable?:filerteable}
 				</nobr>

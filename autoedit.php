@@ -526,8 +526,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$d = infra_loadJSON($takepath);
 				$v['corable'] = in_array(strtolower($v['ext']), $CORABLE);
 
-				$v['pathload'] = infra_theme('*autoedit/download.php?'.$file);
-				$v['pathload'] = infra_toutf($v['pathload']);
+				$v['pathload'] = '?*autoedit/download.php?'.infra_toutf($file);
 				
 				$v['mytake'] = autoedit_ismytake($file);
 				if ($d) {
