@@ -296,7 +296,7 @@
 	<table class="teditfolder table table-striped table-hover table-clicked" style="margin-top:10px">
 		<thead>
 			<tr onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-				<td></td><td>Файл</td><td>Кб</td><td colspan="2">Дата&nbsp;изменения</td><td>
+				<td></td><td>Файл</td><td>Кб</td><td colspan="2">Дата&nbsp;изменения</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -324,7 +324,7 @@
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')">
 				{name}
 			</td>
-			<td>&nbsp;</td><td>{date?:date?}</td>
+			<td>&nbsp;</td><td>{~date(:d.m.Y,time)}</td>
 			<td>
 				<span class="action" style="visibility:hidden">
 					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('rmdir','{data.id}{name}/')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
@@ -339,18 +339,17 @@
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')">
 				{file}{:strtake}
 			</td>
-			<td>{size}</td><td>{~date(:d.m.Y,date)}</td>
-			{mytake?:actions}
+			<td>{size}</td><td>{~date(:d.m.Y,time)}</td>
+			<td>{mytake?:actions}</td>
 		</tr>
 	{point:}.
 	{strtake:}
-			<td>
-				{take?:strtakenow}
-			</td>
+			
+			{take?:strtakenow}
 	{strtakenow:}
 		<span class="btn btn-xs {mytake?:btn-warning?:btn-danger}" onclick="AUTOEDIT('takeinfo','{data.id}{name}{ext?:point}{ext}')">{~date(:_takedate,take)}</span>
 	{actions:}
-			<td>
+			
 				<nobr class="action" style="visibility:hidden">
 					<a href="{pathload}"><img alt="load" 
 					title="Скачать" src="?*autoedit/images/floppy.png"></a>
@@ -360,7 +359,7 @@
 					{corable?:cancorfile}
 					{rteable?:filerteable}
 				</nobr>
-			</td>
+			
 	{cancorfile:}
 			<img alt="edit" style="cursor:pointer" onclick="AUTOEDIT('corfile','{data.id}{name}{ext?:point}{ext}');" title="Редактировать" src="{infra.theme(:*autoedit/images/edit.png)}"> 
 	{filerteable:}

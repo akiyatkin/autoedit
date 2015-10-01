@@ -39,7 +39,7 @@ AUTOEDIT.menu=[
 	},{
 		name:'Папка с данными',
 		click:function(){
-			AUTOEDIT("editfolder","*");
+			AUTOEDIT("editfolder","~");
 		}
 	},{
 		name:'Редактируемые файлы',

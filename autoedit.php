@@ -60,9 +60,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт всегда пустым
 			$name = array_pop($path);
 			$name = preg_replace("/^\*/", '', $name);
+			$name = preg_replace("/^\~/", '', $name);
 			$parent = implode('/', $path);
 			if (!$parent) {
-				$parent = '*';
+				$parent = '~';
 			} else {
 				$parent .= '/';
 			}
@@ -144,6 +145,9 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		if ($ans['name'][0] == '*') {
 			$ans['name'] = preg_replace('/^\*/', '', $ans['name']);
 			$ans['folder'] = '*';
+		} else if ($ans['name'][0] == '~') {
+			$ans['name'] = preg_replace('/^\~/', '', $ans['name']);
+			$ans['folder'] = '~';
 		} else {
 			$ans['folder'] = str_replace($ans['name'], '', $id);
 		}
@@ -475,25 +479,25 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	if (!$submit) {
 		$folder = $id;
 		$dirs = infra_dirs();
-		$parent = preg_replace("/^\*/", $dirs['data'], $folder);
-
+		$parent = preg_replace("/^~/", $dirs['data'], $folder);
+		
 		$p = explode('/', $parent);
 		array_pop($p);//'/'
 		array_pop($p);//'name/'
 		$parent = implode('/', $p).'/';// *Разделы/
 
-
-		$parentN = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '*', $parent);
+		
+		$parentN = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $parent);
 		if ($parentN!=$parent) {
 			$ans['parent'] = $parentN;
 		}
-
+		
 		$folder = autoedit_theme($id);
+
 		if ($folder && !is_dir($folder)) {
 			return infra_err($ans, 'Нет такой папки');
 		}
-		
-
+		;
 		$list=array();
 		$folders=array();
 		array_map(function ($file) use (&$list, &$folders, $folder) {
@@ -505,17 +509,19 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			
 			$fd=infra_nameinfo($file);
 			$fd['time']=filemtime($src);
+			
 			if (is_file($src)) {
+				$fd['size']=round(filesize($src)/1000,2);
 				$list[]=$fd;
 			} else {
 				$folders[]=$fd;
 			}
-			
 		}, scandir($folder));
-
-
+		$folders=array_reverse($folders);
+		$list=array_reverse($list);
+		
 		$folder = infra_toutf($folder);
-		$folder = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '*', $folder);
+		$folder = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $folder);
 		$ans['list'] = $list;
 		$ans['folders'] = $folders;
 		if ($ans['list']) {
@@ -540,17 +546,20 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	$file = infra_tofs($file[0]);
 	$origfile = $file;
 	$isfile = infra_theme($file);
+	$dirs=infra_dirs();
 	if ($isfile) {
 		$file = $isfile;
 	} else {
-		$file = preg_replace("/^\*/", 'infra/data/', $file);
+		$file = preg_replace("/^~/", $dirs['data'], $file);
+		$file = preg_replace("/^\*/", $dirs['data'], $file);
 	}
 
 	if (!$submit) {
 		$path = explode('/', $file);
 		$name = array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт именем файла
 		$parent = implode('/', $path).'/';
-		$parent = preg_replace("/^infra\/data\//", '*', $parent);
+		
+		$parent = preg_replace("/^infra\/data\//", '~', $parent);
 
 		$ans['oldfolder'] = infra_toutf($parent);//Папка в которой можно увидеть обрабатываемую папку
 		$ans['oldname'] = infra_toutf($name);
@@ -631,11 +640,13 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	}
 } elseif ($type === 'corfile') {
 	if (!$submit) {
-		$folder = preg_replace("/^\*/", 'infra/data/', $id);
+		$dirs=infra_dirs();
+		$folder = preg_replace("/^\*/", $dirs['data'], $id);
+		$folder = preg_replace("/^~/", $dirs['data'], $folder);
 		$path = explode('/', $folder);
 		$name = array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт всегда пустым
 		$parent = implode('/', $path).'/';
-		$parent = preg_replace("/^infra\/data\//", '*', $parent);
+		$parent = preg_replace("/^infra\/data\//", '~', $parent);
 
 		$ans['oldfolder'] = $parent;//Папка в которой можно увидеть обрабатываемую папку
 		$ans['oldname'] = $name;
@@ -696,7 +707,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		foreach ($list as $file) {
 			$d = infra_loadJSON($takepath.$file);
 			$dirs = infra_dirs();
-			$d['path'] = str_replace($dirs['data'], '*', $d['path']);
+			$d['path'] = str_replace($dirs['data'], '~', $d['path']);
 
 			$d['modified'] = filemtime(infra_theme($d['path']));
 			preg_match("/\.([a-zA-Z]+)$/", $d['path'], $match);

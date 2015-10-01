@@ -4,9 +4,7 @@ function autoedit_theme($isrc)
 {
 	$src = infra_admin_cache('autoedit_theme', function ($isrc) {
 		$src = infra_theme($isrc);
-		if ($src) {
-			return $src;
-		}
+		if ($src) return $src;
 		$fdata = infra_srcinfo($isrc);
 		$folder = infra_theme($fdata['folder']);
 		if (!infra_theme($folder)) {
