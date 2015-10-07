@@ -168,7 +168,7 @@ AUTOEDIT.checkLayer=function(layer){
 				var ext=r[r.length-1];
 				if(infra.forr(['tpl','html'],function(e){
 					if(e==ext)return true;
-				}))return AUTOEDIT('rte',fast);
+				}))return AUTOEDIT('corfile',fast);
 				if(infra.forr(['txt','json','js'],function(e){
 					if(e==ext)return true;
 				}))return AUTOEDIT('corfile',fast);
