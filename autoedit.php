@@ -417,7 +417,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 
 			$ans['size'] = ceil(filesize($file) / 1000);
 			$ans['time'] = filemtime($file);
-			preg_match("/\.([a-zA-Z]+)$/", $file, $match);
+			preg_match("/\.([a-zA-Z0-9]+)$/", $file, $match);
 			$ans['ext'] = strtolower($match[1]);
 		}
 		$ans['corable'] = in_array(strtolower($ans['ext']), $CORABLE);
@@ -445,13 +445,13 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$p = explode('/', $id);//Имя с расширением
 			$ans['file'] = array_pop($p);
 		}
-		$ans['file'] = preg_replace("/^\*/", '', infra_toutf($ans['file']));
+		$ans['file'] = preg_replace("/^\~/", '', infra_toutf($ans['file']));
 
 		$p = explode('/', $ans['id']);
 		array_pop($p);
 		$ans['folder'] = implode('/', $p);
 		if ($ans['folder'] == '/' || !$ans['folder']) {
-			$ans['folder'] = '*';
+			$ans['folder'] = '~';
 		} else {
 			$ans['folder'] .= '/';
 		}
@@ -464,7 +464,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		
 
 		$ans['pathload'] = '?*autoedit/download.php?'.infra_toutf($id);
-		$ans['path'] = infra_toutf($ans['path']);
+		$ans['path'] = infra_toutf(infra_theme($ans['path']));
 	}
 } elseif ($type == 'takeinfo') {
 	$file = autoedit_theme($id);
