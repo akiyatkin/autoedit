@@ -250,7 +250,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		}
 	}
 } elseif ($type == 'version') {
-	$tpl = infra_loadTEXT('*infrajs/version.tpl');
+	$tpl = infra_loadTEXT('*controller/version.tpl');
 	if (!$tpl) {
 		$tpl = 'Информация не указана.';
 	}
