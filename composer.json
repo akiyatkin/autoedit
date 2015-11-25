@@ -1,16 +1,9 @@
 {
-	"name": "itlife/autoedit",
-	"description": "plugin for infrajs",
+	"name": "infrajs/autoedit",
+	"description": "Autoedit for layers in infrajs",
 	"license": "GPL3",
-	"authors": [{
-		"name": "itlife",
-		"email": "info@itlife-studio.ru"
-	}],
-	"autoload": {
-		"psr-4": { "itlife\\autoedit\\": "/" }
-	},
 	"require":{
-		"itlife/infrajs":"~1",
-		"itlife/imager":"~1"
+		"infrajs/controller":"~1",
+		"infrajs/imager":"~1"
 	}
 }
