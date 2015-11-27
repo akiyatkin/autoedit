@@ -1,5 +1,5 @@
 <?php
-
+use infrajs\once\Once;
 /*
 Copyright 2008-2010 http://itlife-studio.ru
 
@@ -13,7 +13,7 @@ if (!function_exists('file_download')) {
 			$agent = $_SERVER['HTTP_USER_AGENT'];
 		}
 		$agent = strtolower($agent);
-		$name = infra_once('infra_imager_browser', function ($agent) {
+		$name = Once::exec('infra_imager_browser', function ($agent) {
 			if (preg_match('/msie (\d)/', $agent, $matches)) {
 				$name = 'ie ie'.$matches[1];
 			} elseif (preg_match('/opera/', $agent)) {
