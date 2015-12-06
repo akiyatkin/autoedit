@@ -1,10 +1,7 @@
 <?php
+namespace infrajs\autoedit;
+use infrajs\path\Path;
+require_once(__DIR__.'/../../../vendor/autoload.php');
+require_once(__DIR__.'/../path/install.php');
 
-$conf = infra_config();
-
-$dirs = infra_dirs();
-
-if ($conf['infra']['cache'] == 'fs') {
-	@mkdir($dirs['cache']);
-	@mkdir($dirs['cache'].'admin_takefiles/');
-}
+Path::mkdir(Path::$conf['cache'].'admin_takefiles/');

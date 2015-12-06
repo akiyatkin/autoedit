@@ -4,6 +4,7 @@
 	"license": "GPL3",
 	"require":{
 		"infrajs/controller":"~1",
-		"infrajs/imager":"~1"
+		"infrajs/imager":"~1",
+		"infrajs/path":"~1"
 	}
 }
