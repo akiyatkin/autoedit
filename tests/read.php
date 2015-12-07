@@ -1,34 +1,43 @@
 <?php
+namespace infrajs\autoedit;
+use infrajs\load\Load;
+use infrajs\access\Access;
+use infrajs\ans\Ans;
+
+if (!is_file('vendor/autoload.php')) {
+	chdir('../../../');
+	require_once('vendor/autoload.php');
+}
 
 $ans=array();
 $ans['title']='Общая проверка';
-infra_test(true);
+Access::test(true);
 
 
-$res=infra_loadJSON('*autoedit/autoedit.php?type=editfile&id=*.infra.json');
+$res=Load::loadJSON('*autoedit/autoedit.php?type=editfile&id=*.infra.json');
 
-if (infra_admin()) {
+if (Access::admin()) {
 	if (!$res['result'] || !$res['isfile']) {
-		return infra_err($ans, 'Неудалось получить информацию о файле .infra.json');
+		return Ans::err($ans, 'Неудалось получить информацию о файле .infra.json');
 	}
 } else {
 	if (!$res||$res['result']) {
-		return infra_err($ans, 'Неудалось обратиться за файлом .infra.json');
+		return Ans::err($ans, 'Неудалось обратиться за файлом .infra.json');
 	}
 }
 
 
-$res=infra_loadJSON('*autoedit/autoedit.php?type=editfolder&id=~');
+$res=Load::loadJSON('*autoedit/autoedit.php?type=editfolder&id=~');
 
-if (infra_admin()) {
+if (Access::admin()) {
 	if (!$res['result'] || !sizeof($res['list'])) {
-		return infra_err($ans, 'Неудалось прочитать папку');
+		return Ans::err($ans, 'Неудалось прочитать папку');
 	}
 } else {
 	if (!$res||$res['result']) {
-		return infra_err($ans, 'Неудалось обратиться к папке');
+		return Ans::err($ans, 'Неудалось обратиться к папке');
 	}
 }
 
 
-return infra_ret($ans, 'Вроде ок, прочитали папку, посмотрели файл');
+return Ans::ret($ans, 'Вроде ок, прочитали папку, посмотрели файл');

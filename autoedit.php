@@ -1,11 +1,19 @@
 <?php
+namespace infrajs\autoedit;
+use infrajs\load\Load;
+use infrajs\path\Path;
+use infrajs\ans\Ans;
+use infrajs\access\Access;
 
+if (!is_file('vendor/autoload.php')) {
+	chdir('../../../');
+	require_once('vendor/autoload.php');
+}
 
+Path::req('*autoedit/admin.inc.php');
 
-infra_require('*autoedit/admin.inc.php');
-
-$type = infra_toutf(@$_REQUEST['type']);
-$id = infra_toutf(@$_REQUEST['id']);
+$type = Path::toutf(@$_REQUEST['type']);
+$id = Path::toutf(@$_REQUEST['id']);
 $submit = (bool) @$_REQUEST['submit'];
 
 $RTEABLE = array('tpl','html','htm','');
@@ -14,48 +22,48 @@ $CORABLE = array('json','tpl','html','htm','txt','js','css','');
 $ans = array('id' => $id,'type' => $type,'msg' => '');
 if (in_array($type, array('admin'))) {
 	if (!$submit) {
-		$ans['admin'] = infra_admin();
+		$ans['admin'] = Access::admin();
 	} else {
-		$ans['admin'] = infra_admin(array(@$_REQUEST['login'], @$_REQUEST['pass']));
+		$ans['admin'] = Access::admin(array(@$_REQUEST['login'], @$_REQUEST['pass']));
 		if (!$ans['admin']) {
 			if (isset($_REQUEST['login'])) {
-				return infra_err($ans, 'Неправильный пароль!');
+				return Ans::err($ans, 'Неправильный пароль!');
 			} else {
-				return infra_ret($ans, 'Вы успешно вышли!');
+				return Ans::ret($ans, 'Вы успешно вышли!');
 			}
 		}
 	}
 }
 
-if (!infra_admin()) {
-	return infra_err($ans, 'Вам нужно авторизоваться');
+if (!Access::admin()) {
+	return Ans::err($ans, 'Вам нужно авторизоваться');
 }
 
 if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	if ($id{0} != '*') {
-		return infra_err($ans, 'Путь должен быть тематический, начинаться с *.');
+		return Ans::err($ans, 'Путь должен быть тематический, начинаться с *.');
 	}
 
 	
 
-	if ($type === 'mkdir' && !infra_theme($id, 'snd')) {
-		return infra_err($ans, 'Нет папки в которой нужно создать');
+	if ($type === 'mkdir' && !Path::theme($id, 'snd')) {
+		return Ans::err($ans, 'Нет папки в которой нужно создать');
 	}
-	if ($type === 'mvdir' && !infra_theme($id, 'snd')) {
-		return infra_err($ans, 'Нет папки которую нужно перенести');
+	if ($type === 'mvdir' && !Path::theme($id, 'snd')) {
+		return Ans::err($ans, 'Нет папки которую нужно перенести');
 	}
-	if ($type === 'cpdir' && !infra_theme($id, 'snd')) {
-		return infra_err($ans, 'Нет папки которую нужно скопировать');
+	if ($type === 'cpdir' && !Path::theme($id, 'snd')) {
+		return Ans::err($ans, 'Нет папки которую нужно скопировать');
 	}
-	if ($type === 'rmdir' && !infra_theme($id, 'snd')) {
-		return infra_err($ans, 'Нет папки которую нужно удалить');
+	if ($type === 'rmdir' && !Path::theme($id, 'snd')) {
+		return Ans::err($ans, 'Нет папки которую нужно удалить');
 	}
 
 	
 	if (!$submit) {
 		if (in_array($type, array('mvdir', 'cpdir', 'rmdir'))) {
 			//Нужно определить имя родительской папки, которое по умолчанию показывается
-			$path = infra_theme($id, 'snd');
+			$path = Path::theme($id, 'snd');
 			$path = explode('/', $id);
 			array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт всегда пустым
 			$name = array_pop($path);
@@ -82,10 +90,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$oldname = $_REQUEST['oldname'];
 			$oldpath = $oldfolder.$oldname.'/';
 			if ($id !== $oldpath) {
-				return infra_err($ans, 'Ошибка в переданных параметрах');
+				return Ans::err($ans, 'Ошибка в переданных параметрах');
 			}
-			if (!infra_theme($oldpath, 'snd')) {
-				return infra_err($ans, 'Не найден оригинальный путь');
+			if (!Path::theme($oldpath, 'snd')) {
+				return Ans::err($ans, 'Не найден оригинальный путь');
 			}
 		}
 		if (in_array($type, array('mvdir', 'cpdir', 'mkdir'))) {
@@ -94,48 +102,48 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$newname = trim($_REQUEST['newname']);
 			$newpath = $newfolder.$newname.'/';
 			if (!$newname) {
-				return infra_err($ans, 'Нужно указать имя');
+				return Ans::err($ans, 'Нужно указать имя');
 			}
 			if (preg_match('/\//', $newname)) {
-				return infra_err($ans, 'Имя папки не может содержать слэш');
+				return Ans::err($ans, 'Имя папки не может содержать слэш');
 			}
-			if (!infra_theme($newfolder)) {
-				return infra_err($ans, 'Не найдено новое место где нужно расположить папку');
+			if (!Path::theme($newfolder)) {
+				return Ans::err($ans, 'Не найдено новое место где нужно расположить папку');
 			}
-			if (infra_theme($newpath)) {
-				return infra_err($ans, 'Такая папка уже существует или имя занято');
+			if (Path::theme($newpath)) {
+				return Ans::err($ans, 'Такая папка уже существует или имя занято');
 			}
 		}
 		if ($type === 'mvdir') {
-			if (@rename(infra_theme($oldfolder).infra_tofs($oldname).'/', infra_theme($newfolder).infra_tofs($newname).'/')) {
+			if (@rename(Path::theme($oldfolder).Path::tofs($oldname).'/', Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;
 
-				return infra_ret($ans, 'Директория переименована.');
+				return Ans::ret($ans, 'Директория переименована.');
 			} else {
-				return infra_err($ans, 'Не удалось переименовать директорию.');
+				return Ans::err($ans, 'Не удалось переименовать директорию.');
 			}
 		} elseif ($type === 'mkdir') {
-			if (@mkdir(infra_theme($newfolder).infra_tofs($newname).'/')) {
+			if (@mkdir(Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;//Сигнал окну закрыться
-				return infra_ret($ans, 'Директория создана');
+				return Ans::ret($ans, 'Директория создана');
 			} else {
-				return infra_err($ans, 'Создать директорию не получилось.');
+				return Ans::err($ans, 'Создать директорию не получилось.');
 			}
 		} elseif ($type === 'cpdir') {
-			if (@copy(infra_theme($oldfolder).infra_tofs($oldname), infra_theme($newfolder).infra_tofs($newname).'/')) {
+			if (@copy(Path::theme($oldfolder).Path::tofs($oldname), Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;
 
-				return infra_ret($ans, 'Директория скопирована');
+				return Ans::ret($ans, 'Директория скопирована');
 			} else {
-				return infra_err($ans, 'Скопировать директорию не получилось.');
+				return Ans::err($ans, 'Скопировать директорию не получилось.');
 			}
 		} elseif ($type === 'rmdir') {
-			if (@rmdir(infra_theme($oldfolder).infra_tofs($oldname))) {
+			if (@rmdir(Path::theme($oldfolder).Path::tofs($oldname))) {
 				$ans['close'] = 1;
 
-				return infra_ret($ans, 'Директория удалена.');
+				return Ans::ret($ans, 'Директория удалена.');
 			} else {
-				return infra_ret($ans, 'Ошибка. Папка не удалена. Вероятно она не пустая.');
+				return Ans::ret($ans, 'Ошибка. Папка не удалена. Вероятно она не пустая.');
 			}
 		}
 	}
@@ -151,14 +159,14 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		} else {
 			$ans['folder'] = str_replace($ans['name'], '', $id);
 		}
-		$ans['full'] = infra_theme($ans['folder']);
-		$ans['full'] = infra_toutf($ans['full']);
-		$file = infra_theme($id);
+		$ans['full'] = Path::theme($ans['folder']);
+		$ans['full'] = Path::toutf($ans['full']);
+		$file = Path::theme($id);
 		$ans['isfile'] = (bool) $file;
 
 		$takepath = autoedit_takepath($file);
 		if ($file) {
-			$ans['take'] = infra_loadJSON($takepath);
+			$ans['take'] = Load::loadJSON($takepath);
 		} else {
 			$ans['take'] = false;
 		}
@@ -167,90 +175,90 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$ans['close'] = 1;//закрывать окно по окончанию
 			$ans['autosave'] = 0;//Не очищать autosave
 
-			$file = infra_theme($id);
+			$file = Path::theme($id);
 			if (!$file) {
-				return infra_err($ans, 'Файл не найден '.infra_toutf($id), 0);
+				return Ans::err($ans, 'Файл не найден '.Path::toutf($id), 0);
 			}
 			$takepath = autoedit_takepath($file);
-			$take = infra_loadJSON($takepath);
+			$take = Load::loadJSON($takepath);
 			if ($take) {
 				$ans['editfile'] = $id;
 				$ans['takeinfo'] = $take;
 
-				return infra_err($ans, 'Файл занят '.infra_toutf($id));
+				return Ans::err($ans, 'Файл занят '.Path::toutf($id));
 			}
 			$msg = autoedit_backup($file);
 			if (is_string($msg)) {
-				return infra_err($ans, $msg);
+				return Ans::err($ans, $msg);
 			}
 			$r = @unlink($file);
 			if (!$r) {
-				return infra_err($ans, 'Неудалось удалить файл. Возможно нет прав, если это скрытый файл в windows.');
+				return Ans::err($ans, 'Неудалось удалить файл. Возможно нет прав, если это скрытый файл в windows.');
 			}
 		} elseif ($type == 'renamefile' || $type == 'copyfile') {
-			$oldfolder = infra_theme($_REQUEST['oldfolder']);
+			$oldfolder = Path::theme($_REQUEST['oldfolder']);
 			if (!$oldfolder) {
-				return infra_err($ans, 'Не найдена оригинальная папка '.infra_toutf($_REQUEST['oldfolder']));
+				return Ans::err($ans, 'Не найдена оригинальная папка '.Path::toutf($_REQUEST['oldfolder']));
 			}
-			$oldname = infra_tofs($_REQUEST['oldname']);
-			$oldfile = infra_theme($oldfolder.$oldname);
+			$oldname = Path::tofs($_REQUEST['oldname']);
+			$oldfile = Path::theme($oldfolder.$oldname);
 			if (!is_file($oldfile)) {
-				return infra_err($ans, 'Не найден оригинальный файл'.infra_toutf(@$_REQUEST['oldold']));
+				return Ans::err($ans, 'Не найден оригинальный файл'.Path::toutf(@$_REQUEST['oldold']));
 			}
 			$takepath = autoedit_takepath($oldfile);
 
-			$take = infra_loadJSON($takepath);
+			$take = Load::loadJSON($takepath);
 			if ($take) {
 				$ans['editfile'] = $_REQUEST['oldfolder'].$_REQUEST['oldname'];
 				$ans['takeinfo'] = $take;
 
-				return infra_err($ans, 'Файл занят');
+				return Ans::err($ans, 'Файл занят');
 			}
 		}
 		if ($type == 'renamefile' || $type == 'copyfile') {
-			$newname = trim(infra_tofs($_REQUEST['newname']));
+			$newname = trim(Path::tofs($_REQUEST['newname']));
 			if (!$newname) {
-				return infra_err($ans, 'Не указано имя нового файла '.infra_toutf($oldfile));
+				return Ans::err($ans, 'Не указано имя нового файла '.Path::toutf($oldfile));
 			}
 			$isfull = (bool) @$_REQUEST['full'];
 			if ($isfull) {
 				$ans['newfile'] = $_REQUEST['newfolder'].$_REQUEST['newname'];
-				$newfolder = infra_theme($_REQUEST['newfolder']);
+				$newfolder = Path::theme($_REQUEST['newfolder']);
 				if (!$newfolder) {
-					return infra_err($ans, 'Не найдена папка '.infra_toutf($newfolder));
+					return Ans::err($ans, 'Не найдена папка '.Path::toutf($newfolder));
 				}
 			} else {
 				$ans['newfile'] = $_REQUEST['oldfolder'].$_REQUEST['newname'];
 				$newfolder = $oldfolder;
 			}
 			if (($newfolder == $oldfolder && $newname == $oldname)) {
-				return infra_err($ans, 'Нужно указать новое имя файла '.infra_toutf($oldfile));
+				return Ans::err($ans, 'Нужно указать новое имя файла '.Path::toutf($oldfile));
 			}
 
 			$newfile = $newfolder.$newname;
-			$r = infra_theme($newfolder.$newname);
+			$r = Path::theme($newfolder.$newname);
 			if ($r) {
 				$ans['editfile'] = $ans['newfile'];
 
-				return infra_err($ans, 'Указанный файл '.infra_toutf($newfolder.$newname).' уже существует.');
+				return Ans::err($ans, 'Указанный файл '.Path::toutf($newfolder.$newname).' уже существует.');
 			}
 		}
 		$ans['close'] = 1;//закрывать окно по окончанию
 		if ($type == 'renamefile') {
 			$r = rename($oldfile, $newfile);
 			if (!$r) {
-				return infra_err($ans, 'Неудалось переименовать файл');
+				return Ans::err($ans, 'Неудалось переименовать файл');
 			}
 		}
 		if ($type == 'copyfile') {
 			$r = copy($oldfile, $newfile);
 			if (!$r) {
-				return infra_err($ans, 'Неудалось скопировать файл');
+				return Ans::err($ans, 'Неудалось скопировать файл');
 			}
 		}
 	}
 } elseif ($type == 'version') {
-	$tpl = infra_loadTEXT('*controller/version.tpl');
+	$tpl = Load::loadTEXT('*controller/version.tpl');
 	if (!$tpl) {
 		$tpl = 'Информация не указана.';
 	}
@@ -259,14 +267,14 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	if (!$submit) {
 		$name = $_REQUEST['name'];
 		if ($name) {
-			$file = infra_theme($id.$name);
+			$file = Path::theme($id.$name);
 			$takepath = autoedit_takepath($file);
-			$take = infra_loadJSON($takepath);
+			$take = Load::loadJSON($takepath);
 			$ans['path'] = $id.$name;
 			$ans['take'] = $take;
 		}
 	} else {
-		$ifolder = infra_toutf($id);
+		$ifolder = Path::toutf($id);
 
 		$folder = autoedit_createPath($ifolder);
 		if (!$folder) {
@@ -291,29 +299,29 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			return err($ans, 'Ошибка при загрузкe файла '.$ofile['error']);
 		}
 
-		$name = infra_toutf($ofile['name']);
+		$name = Path::toutf($ofile['name']);
 		$ans['name'] = $name;
-		$file = $folder.infra_tofs($name);
+		$file = $folder.Path::tofs($name);
 
 		if (!$rewrite && is_file($file)) {
-			$ans['edit'] = $id.infra_toutf($name);
+			$ans['edit'] = $id.Path::toutf($name);
 
 			return err($ans, 'Указанный файл уже есть');
 		}
 
 		$takepath = autoedit_takepath($file);
-		$take = infra_loadJSON($takepath);
+		$take = Load::loadJSON($takepath);
 		if ($take && is_file($file)) {
-			$ans['edit'] = $id.infra_toutf($name);
+			$ans['edit'] = $id.Path::toutf($name);
 			$ans['take'] = $take;
 
 			return err($ans, 'Ошибка! Файл существует и сейчас редактируется!');
 		}
 		if (!is_file($ofile['tmp_name'])) {
-			return err($ans, 'Не найден загруженный файл '.infra_toutf($ofile['name']));
+			return err($ans, 'Не найден загруженный файл '.Path::toutf($ofile['name']));
 		}
 		if (!move_uploaded_file($ofile['tmp_name'], $file)) {
-			return err($ans, 'Не удалось загрузить файл '.infra_toutf($id.$name));
+			return err($ans, 'Не удалось загрузить файл '.Path::toutf($id.$name));
 		}
 		$ans['close'] = 1;
 		$ans['autosave'] = 1;
@@ -321,25 +329,25 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 } elseif ($type == 'editfile') {
 	if ($submit) {
 		$ofile = $_FILES['file'];
-		$ifolder = infra_toutf($_REQUEST['folder']);
+		$ifolder = Path::toutf($_REQUEST['folder']);
 
 		$folder = autoedit_createPath($ifolder);
 
 		$ans['close'] = 0;
 		if ($folder) {
-			$oldname = infra_tofs($_REQUEST['file']);
-			$file = $ifolder.infra_toutf($oldname);
-			$oldfile = infra_theme($file);//Цифры не ищутся когда путь прямой без *
+			$oldname = Path::tofs($_REQUEST['file']);
+			$file = $ifolder.Path::toutf($oldname);
+			$oldfile = Path::theme($file);//Цифры не ищутся когда путь прямой без *
 			if (!$oldfile) {
 				$ans['mmmm'] = 'Не найден старый файл '.$file;
-				//return err($ans,'Не найден файл '.infra_toutf($file));
+				//return err($ans,'Не найден файл '.Path::toutf($file));
 				//Значит старого файла и не было... ну такое тоже возможно... просто создаём новый
 			}
 			if ($oldfile && $ofile && !$ofile['error']) {
 				//Делаем backup
 				$msg = autoedit_backup($oldfile);
 				if (is_string($msg)) {
-					return infra_err($ans, $msg);
+					return Ans::err($ans, $msg);
 				}
 			}
 			if ($ofile) {
@@ -352,8 +360,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 					}
 				} else {
 					if ($oldfile) {
-						$newname = infra_tofs($ofile['name']);
-						$newfile = infra_theme($folder.$newname);
+						$newname = Path::tofs($ofile['name']);
+						$newfile = Path::theme($folder.$newname);
 
 						$newr = infra_nameinfo($newname);
 						$oldr = infra_nameinfo($oldname);
@@ -364,12 +372,12 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 						$ans['dddd'] = $oldr;
 
 						if (!@$_REQUEST['passname'] && ($newr['name'] != $oldr['name'] || $newr['ext'] != $oldr['ext'])) {
-							return infra_err($ans, 'Имя загружаемого файла и расширение должны совпадать с текущим файлом, кроме (1) и точки в начале имени. Текущий файл '.$newr['name'].'.'.$newr['ext']);
+							return Ans::err($ans, 'Имя загружаемого файла и расширение должны совпадать с текущим файлом, кроме (1) и точки в начале имени. Текущий файл '.$newr['name'].'.'.$newr['ext']);
 						}
 						$file = $oldfile;
 						$r = unlink($file);
 						if (!$r) {
-							return err($ans, 'Не удалось удалить старый файл '.infra_toutf($file));
+							return err($ans, 'Не удалось удалить старый файл '.Path::toutf($file));
 						}
 					} else {
 						$extload = preg_match('/\.\w{0,4}$/', $ofile['name'], $match);
@@ -382,19 +390,19 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 						$file = preg_replace('/^\*/', 'infra/data/', $file);
 					}
 					if (!is_file($ofile['tmp_name'])) {
-						return err($ans, 'Не найден загруженный файл '.infra_toutf($ofile['name']));
+						return err($ans, 'Не найден загруженный файл '.Path::toutf($ofile['name']));
 					}
-					$file = infra_tofs($file);
+					$file = Path::tofs($file);
 					$r = move_uploaded_file($ofile['tmp_name'], $file);
 					if (!$r) {
-						return err($ans, 'Не удалось загрузить файл '.infra_toutf($file));
+						return err($ans, 'Не удалось загрузить файл '.Path::toutf($file));
 					}
 					//autoedit_setLastFolderUpdate($file);
-					return infra_ret($ans, 'Файл загружен <span title="'.infra_toutf($file).'">'.infra_toutf($ofile['name']).'</span>');
+					return Ans::ret($ans, 'Файл загружен <span title="'.Path::toutf($file).'">'.Path::toutf($ofile['name']).'</span>');
 				}
 			}
 		} else {
-			return infra_err($ans, 'Не найдена папка');
+			return Ans::err($ans, 'Не найдена папка');
 		}
 	} else {
 		$file = autoedit_theme($id);//Можно указывать путь без расришения (Для админки которая не знает что будет за файл
@@ -408,7 +416,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		} else {
 			$ans['isfile'] = true;
 			$takepath = autoedit_takepath($file);
-			$take = infra_loadJSON($takepath);
+			$take = Load::loadJSON($takepath);
 			if ($take) {
 				$ans['take'] = $take['date'];
 			} else {
@@ -421,13 +429,13 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$ans['ext'] = strtolower($match[1]);
 		}
 		$ans['corable'] = in_array(strtolower($ans['ext']), $CORABLE);
-		$ans['rteable'] = (bool) infra_theme('infra/lib/wymeditor/');
+		$ans['rteable'] = (bool) Path::theme('infra/lib/wymeditor/');
 		if ($ans['rteable']) {
 			$ans['rteable'] = in_array(strtolower($ans['ext']), $RTEABLE);
 		}
-		$conf = infra_config();
+		$conf = Infra::config();
 		$imgext = $conf['imager']['images'];
-		infra_forr($imgext, function &($e) use (&$ans) {
+		Each::forr($imgext, function &($e) use (&$ans) {
 			if ($e == $ans['ext']) {
 				$ans['image'] = true;
 			}//Значит это картинка
@@ -445,7 +453,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$p = explode('/', $id);//Имя с расширением
 			$ans['file'] = array_pop($p);
 		}
-		$ans['file'] = preg_replace("/^\~/", '', infra_toutf($ans['file']));
+		$ans['file'] = preg_replace("/^\~/", '', Path::toutf($ans['file']));
 
 		$p = explode('/', $ans['id']);
 		array_pop($p);
@@ -457,19 +465,19 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		}
 
 		
-		//$s=infra_tofs($s);
+		//$s=Path::tofs($s);
 		//$p=_infra_src($s);
 		//echo '<pre>';
 		//print_r($p);
 		
 
-		$ans['pathload'] = '?*autoedit/download.php?'.infra_toutf($id);
-		$ans['path'] = infra_toutf(infra_theme($ans['path']));
+		$ans['pathload'] = '?*autoedit/download.php?'.Path::toutf($id);
+		$ans['path'] = Path::toutf(Path::theme($ans['path']));
 	}
 } elseif ($type == 'takeinfo') {
 	$file = autoedit_theme($id);
 	$takepath = autoedit_takepath($file);
-	$take = infra_loadJSON($takepath);
+	$take = Load::loadJSON($takepath);
 
 	$ans['path'] = $id;
 	$ans['take'] = $take;
@@ -495,7 +503,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$folder = autoedit_theme($id);
 
 		if ($folder && !is_dir($folder)) {
-			return infra_err($ans, 'Нет такой папки');
+			return Ans::err($ans, 'Нет такой папки');
 		}
 		;
 		$list=array();
@@ -505,7 +513,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				return;
 			}
 			$src=$folder.$file;
-			$file=infra_toutf($file);
+			$file=Path::toutf($file);
 			
 			$fd=infra_nameinfo($file);
 			$fd['time']=filemtime($src);
@@ -520,7 +528,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$folders=array_reverse($folders);
 		$list=array_reverse($list);
 		
-		$folder = infra_toutf($folder);
+		$folder = Path::toutf($folder);
 		$folder = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $folder);
 		$ans['list'] = $list;
 		$ans['folders'] = $folders;
@@ -529,10 +537,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$e = $v['ext'] ? '.'.$v['ext'] : '';
 				$file = $folder.$v['file'];
 				$takepath = autoedit_takepath($file);
-				$d = infra_loadJSON($takepath);
+				$d = Load::loadJSON($takepath);
 				$v['corable'] = in_array(strtolower($v['ext']), $CORABLE);
 
-				$v['pathload'] = '?*autoedit/download.php?'.infra_toutf($file);
+				$v['pathload'] = '?*autoedit/download.php?'.Path::toutf($file);
 				
 				$v['mytake'] = autoedit_ismytake($file);
 				if ($d) {
@@ -543,9 +551,9 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	}
 } elseif ($type === 'jsoneditor') {
 	$file = explode('|', $id);
-	$file = infra_tofs($file[0]);
+	$file = Path::tofs($file[0]);
 	$origfile = $file;
-	$isfile = infra_theme($file);
+	$isfile = Path::theme($file);
 	$dirs=infra_dirs();
 	if ($isfile) {
 		$file = $isfile;
@@ -561,22 +569,22 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		
 		$parent = preg_replace("/^infra\/data\//", '~', $parent);
 
-		$ans['oldfolder'] = infra_toutf($parent);//Папка в которой можно увидеть обрабатываемую папку
-		$ans['oldname'] = infra_toutf($name);
+		$ans['oldfolder'] = Path::toutf($parent);//Папка в которой можно увидеть обрабатываемую папку
+		$ans['oldname'] = Path::toutf($name);
 
 		if ($isfile) {
-			$ans['content'] = infra_loadTEXT($file);
+			$ans['content'] = Load::loadTEXT($file);
 		} else {
 			$ans['content'] = '';
 		}
 
-		return infra_ret($ans);
+		return Ans::ret($ans);
 	} else {
 		if (!$isfile) {
 			if (!autoedit_ext($file)) {
 				$file .= '.json';
 			}
-			//$file=infra_theme($file,'sfnm');//Создали путь до файла
+			//$file=Path::theme($file,'sfnm');//Создали путь до файла
 
 			//$f=preg_replace('/^\*/','*/',$file);
 			/*$p=explode('/',$f);
@@ -587,22 +595,22 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 
 			$ans['msg'] .= 'Файл был создан<br>';
 			if (!$file) {
-				return infra_err($ans, 'Не удалось создать путь до файла '.infra_toutf($file));
+				return Ans::err($ans, 'Не удалось создать путь до файла '.Path::toutf($file));
 			}
 		}
 
 		$r = file_put_contents($file, $_REQUEST['content']);
 		if (!$r) {
-			return infra_err($ans, 'Неудалось сохранить файл');
+			return Ans::err($ans, 'Неудалось сохранить файл');
 		}
 		$ans['msg'] .= 'Cохранено';
 
-		return infra_ret($ans);
+		return Ans::ret($ans);
 	}
 } elseif ($type === 'seo') {
 	$dirs = infra_dirs();
 	$dir = $dirs['data'].'seo/';//stencil//
-	$src = infra_tofs($id);
+	$src = Path::tofs($id);
 	$src = str_replace('/', '-', $src);
 	$src = str_replace('..', '-', $src);
 	if (strlen($src) > 100) {
@@ -610,7 +618,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	}
 	$src = $dir.'seo-'.$src.'.json';
 	if (!$submit) {
-		$seo = infra_loadJSON($src);
+		$seo = Load::loadJSON($src);
 		$ans['seo'] = $seo;
 	} else {
 		$dir = autoedit_createPath($dir);
@@ -618,7 +626,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$seo = $_POST['seo'];
 		$def = $_POST['def'];
 		$keys = array();
-		infra_foro($seo, function ($val, $key) use (&$seo, &$def, &$keys) {
+		Each::foro($seo, function ($val, $key) use (&$seo, &$def, &$keys) {
 			if ($seo[$key] == $def[$key]) {
 				return;
 			}
@@ -633,10 +641,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$r = file_put_contents($src, infra_json_encode($keys));
 		}
 		if ($r) {
-			return infra_ret($ans, 'SEO-данные сохранены');
+			return Ans::ret($ans, 'SEO-данные сохранены');
 		}
 
-		return infra_err($ans, 'Ошибка. SEO-данные не сохранены');
+		return Ans::err($ans, 'Ошибка. SEO-данные не сохранены');
 	}
 } elseif ($type === 'corfile') {
 	if (!$submit) {
@@ -651,31 +659,31 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$ans['oldfolder'] = $parent;//Папка в которой можно увидеть обрабатываемую папку
 		$ans['oldname'] = $name;
 
-		$ans['content'] = infra_loadTEXT($id);
+		$ans['content'] = Load::loadTEXT($id);
 
-		return infra_ret($ans);
+		return Ans::ret($ans);
 	} else {
 		$file = $id;
-		//$isdir=infra_theme($file,'sdn');
+		//$isdir=Path::theme($file,'sdn');
 		//if($isdir) return infra_echo($ans,'Существует папка с именем как у файла '.$id);
 
-		$isfile = infra_theme($file);
+		$isfile = Path::theme($file);
 		if (!$isfile) {
 			if (!autoedit_ext($file)) {
 				$file .= '.tpl';
 			}
 			$ans['msg'] .= 'Файл был создан<br>';
-			//$f=preg_replace('/^\*/','*/',infra_tofs($file));
+			//$f=preg_replace('/^\*/','*/',Path::tofs($file));
 			/*$p=explode('/',$f);
 			if($p[0]=='*')$p[0]='infra/data';
 			$f=array_pop($p);//достали файл*/
 			$file = autoedit_createPath($file);
-			//$file=infra_tofs($dir.$f);
+			//$file=Path::tofs($dir.$f);
 
-			//$file=infra_theme($file,'sfnm');//Создали путь до файла
+			//$file=Path::theme($file,'sfnm');//Создали путь до файла
 
 			if (!$file) {
-				return infra_err($ans, 'Не удалось создать путь до файла'.$id);
+				return Ans::err($ans, 'Не удалось создать путь до файла'.$id);
 			}
 		} else {
 			$file = $isfile;
@@ -684,13 +692,13 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$r = file_put_contents($file, $_REQUEST['content']);
 		//autoedit_setLastFolderUpdate($file);
 		if (!$r) {
-			return infra_err($ans, 'Неудалось сохранить файл');
+			return Ans::err($ans, 'Неудалось сохранить файл');
 		}
 		//$ans['noclose']=1;
 		//$ans['autosave']=0;
 		$ans['msg'] .= 'Cохранено';
 
-		return infra_ret($ans);
+		return Ans::ret($ans);
 	}
 } elseif ($type == 'takeshow') {
 	$takepath = autoedit_takepath();
@@ -699,17 +707,17 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		if ($file=='.' || $file=='..') {
 			return;
 		}
-		$list[]=infra_toutf($file);
+		$list[]=Path::toutf($file);
 	}, scandir($takepath));
 
 	$files = array();
 	if ($list) {
 		foreach ($list as $file) {
-			$d = infra_loadJSON($takepath.$file);
+			$d = Load::loadJSON($takepath.$file);
 			$dirs = infra_dirs();
 			$d['path'] = str_replace($dirs['data'], '~', $d['path']);
 
-			$d['modified'] = filemtime(infra_theme($d['path']));
+			$d['modified'] = filemtime(Path::theme($d['path']));
 			preg_match("/\.([a-zA-Z]+)$/", $d['path'], $match);
 			$d['ext'] = strtolower($match[1]);
 			$files[] = $d;
@@ -721,7 +729,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$take = (bool) $_GET['take'];
 		$ans['take'] = $take;
 		$file = autoedit_theme($id);
-		$file = infra_toutf($file);
+		$file = Path::toutf($file);
 		if (!$file) {
 			$ans['noaction'] = true;//Собственно всё осталось как было
 		} else {
@@ -729,14 +737,14 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			if (!$take && is_file($takepath)) {
 				$r = @unlink($takepath);
 				if (!$r) {
-					return infra_err($ans, 'Неудалось отпустить файл');
+					return Ans::err($ans, 'Неудалось отпустить файл');
 				}
 			} elseif ($take && !is_file($takepath)) {
 				//Повторно захватывать не будем
 				$save = array('path' => $id,'date' => time(),'ip' => $_SERVER['REMOTE_ADDR'],'browser' => $_SERVER['HTTP_USER_AGENT']);
 				$r = file_put_contents($takepath, infra_json_encode($save));
 				if (!$r) {
-					return infra_err('Неудалось захватить файл');
+					return Ans::err('Неудалось захватить файл');
 				}
 			} else {
 				$ans['noaction'] = true;//Собственно всё осталось как было
@@ -746,4 +754,4 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	}
 }
 
-return infra_ret($ans);
+return Ans::ret($ans);

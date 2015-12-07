@@ -77,8 +77,8 @@ if (!function_exists('file_download')) {
 			$br = infra_download_browser();
 			$name = preg_replace("/(.*\/)*/", '', $filename);
 
-			//$name=infra_tofs($name);
-			$name = infra_toutf($name);
+			//$name=Path::tofs($name);
+			$name = Path::toutf($name);
 			if (!preg_match('/ff/', $br)) {
 				$name = rawurlencode($name);
 			}
@@ -115,17 +115,17 @@ if (!function_exists('file_download')) {
 $file = urldecode($_SERVER['QUERY_STRING']);
 
 $set = 'fn';
-$path = infra_theme($file, $set);
+$path = Path::theme($file, $set);
 if (!$path) {
 	//Нет не скрытого файла
-	$r = infra_admin();
+	$r = Access::admin();
 	if (!$r) {
 		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 		header('Status: 404 Not Found');
 		exit;
 	} else {
 		$set = 'fns';
-		$path = infra_theme($file, $set);
+		$path = Path::theme($file, $set);
 	}
 }
 if (!$path) {
@@ -216,7 +216,7 @@ if (!$path) {
 		//header( "Last-Modified: ".gmdate("D, d M Y H:i:s",filemtime($path))." GMT" );
 		file_download($path, $file_types_user[$ext]);
 	} else {
-		infra_admin(true);
+		Access::admin(true);
 		if (!$dyn && $ext && $file_types_admin[$ext]) {
 			file_download($path, $file_types_admin[$ext]);
 		} else {

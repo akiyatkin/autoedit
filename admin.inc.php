@@ -3,11 +3,11 @@
 function autoedit_theme($isrc)
 {
 	$src = infra_admin_cache('autoedit_theme', function ($isrc) {
-		$src = infra_theme($isrc);
+		$src = Path::theme($isrc);
 		if ($src) return $src;
-		$fdata = infra_srcinfo($isrc);
-		$folder = infra_theme($fdata['folder']);
-		if (!infra_theme($folder)) {
+		$fdata = Load::srcInfo($isrc);
+		$folder = Path::theme($fdata['folder']);
+		if (!Path::theme($folder)) {
 			return false;
 		}
 		array_map(function ($file) use (&$result, $fdata) {
@@ -15,7 +15,7 @@ function autoedit_theme($isrc)
 			if ($file{0} == '.') {
 				return;
 			}
-			$file=infra_toutf($file);
+			$file=Path::toutf($file);
 			$fd = infra_nameinfo($file);
 			
 			if ($fdata['id'] && $fdata['id'] != $fd['id']) {
@@ -35,13 +35,13 @@ function autoedit_theme($isrc)
 				}
 			}
 			$result = $file;
-		}, scandir(infra_theme($folder)));
+		}, scandir(Path::theme($folder)));
 
 		if (!$result) {
 			return false;
 		}
 
-		return infra_theme($folder.$result);
+		return Path::theme($folder.$result);
 	}, array($isrc), isset($_GET['re']));
 	return $src;
 }
@@ -57,12 +57,12 @@ function autoedit_createPath($p, $path = '')
 		$p = preg_replace("/^\*/", $dirs['data'], $p);
 		$p = explode('/', $p);
 		$f = array_pop($p);//достали файл или пустой элемент у дирректории
-		$f = infra_tofs($f);
+		$f = Path::tofs($f);
 	} else {
 		$f = '';
 	}
 	$dir = array_shift($p);//Создаём первую папку в адресе
-	$dir = infra_tofs($dir);
+	$dir = Path::tofs($dir);
 	if ($dir) {
 		if (!is_dir($path.$dir)) {
 			$r = mkdir($path.$dir);
@@ -107,14 +107,14 @@ function autoedit_takepath($file = false)
 		return $takepath;
 	}
 	$file=autoedit_theme($file);
-	$path = $takepath.preg_replace('/[\\/\\\\\*]/', '_', infra_tofs($file)).'.js';
+	$path = $takepath.preg_replace('/[\\/\\\\\*]/', '_', Path::tofs($file)).'.js';
 
 	return $path;
 }
 function autoedit_ismytake($file)
 {
 	$takepath = autoedit_takepath($file);
-	$take = infra_loadJSON($takepath);
+	$take = Load::loadJSON($takepath);
 	if (!$take) {
 		return true;
 	}
