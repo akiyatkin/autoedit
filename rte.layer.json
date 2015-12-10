@@ -16,7 +16,7 @@
 	},
 	"json":"...",
 	"dataroot":"data.text",
-	"autosavenametpl":"rte{unick}",
+	"autosavenametpl":"rte{id}",
 	"autosave":{},
 	"layers":{
 		divtpl:'selimg{parent.unick}',

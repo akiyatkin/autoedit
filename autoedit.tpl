@@ -85,7 +85,7 @@
 			infra.require('vendor/vsn4ik/bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js');
 			infra.loadCSS('*autoedit/autoedit.css');
 			infra.when(infrajs,'onshow',function(){
-				var layer=infrajs.getUnickLayer("{unick}");
+				var layer=infrajs.getUnickLayer("{id}");
 				var div=$('#'+layer.div);
 				var box=div.find('[name="autoblockeditor"]');
 
@@ -376,10 +376,10 @@
 				if(!layer.showed)return;
 				if(!layer.autoedit)return;
 				var title=layer.autoedit.title||layer.autoedit.text||layer.autoedit.fast||layer.autoedit.html||layer.tplroot;
-				list[layer.unick]={
+				list[layer.id]={
 					title:title,
 					layer:layer,
-					unick:layer.unick
+					id:layer.id
 				};
 			});
 			var html=infra.template.parse('*autoedit/autoedit.tpl',list,'allblockslist');
@@ -387,7 +387,7 @@
 			div.innerHTML=html;
 
 
-			var layer=infrajs.getUnickLayer({unick});
+			var layer=infrajs.getUnickLayer({id});
 			div=$(div);
 			for(var i in list){
 				(function(){
@@ -403,7 +403,7 @@
 	{allblockslist:}
 		{::allblock}
 	{allblock:}
-		<span class="btn btn-default btn-xs block{unick}">{title|layer}</span> 
+		<span class="btn btn-default btn-xs block{id}">{title|layer}</span> 
 {corfile:}
 	{:style}
 	{:form}
@@ -423,7 +423,7 @@
 	<script type="text/javascript">
 		infra.wait(infrajs,'oncheck',function(){
 
-			var layer=infrajs.getUnickLayer("{unick}");
+			var layer=infrajs.getUnickLayer("{id}");
 			var ta=$('#'+layer.div).find('textarea').get(0);
 			
 			var id="{config.id}";

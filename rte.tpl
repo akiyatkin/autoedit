@@ -57,11 +57,11 @@
 	<div style="overflow:hidden; margin-bottom:10px;" class="wymcont">
 		<textarea autosavebreak="1" class="rte" style="font-family:Tahoma; font-size:12px; color:#444444; width:{config.width}px; height:{config.height}px" name="{config.name}">{.}</textarea>
 	</div>
-	<div id="selimg{unick}"></div>
+	<div id="selimg{id}"></div>
 	<script type="text/javascript">
 		console.log('rte');
 		infra.when(infrajs,'onshow',function(){ //Надо при первом следующем
-			var layer=infrajs.getUnickLayer("{unick}");
+			var layer=infrajs.getUnickLayer("{id}");
 			var div=$('#'+layer.div);
 			var area=div.find('textarea.rte');
 			
@@ -295,7 +295,7 @@
 	<script>
 
 		infra.when(infrajs,'onshow',function(){
-			var layer=infrajs.getUnickLayer("{unick}");//Так можно получить только слой который был добавлен к постоянному списку
+			var layer=infrajs.getUnickLayer("{id}");//Так можно получить только слой который был добавлен к постоянному списку
 			
 			var div=$('#'+layer.div);
 			var conf=layer.config;

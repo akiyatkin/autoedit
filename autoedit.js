@@ -130,7 +130,7 @@ AUTOEDIT.setHandlers=function(){
 			if(!layer.showed)return;
 			$('.adminblock').removeClass('adminblock');
 			return false;
-		}).attr(attr,layer.unick).click(function(e){
+		}).attr(attr,layer.id).click(function(e){
 			if(!AUTOEDIT.active)return;//false блокирует переход по внешней ссылке
 			if(!layer.showed)return false;
 			if(!layer.autoedit)return false;
