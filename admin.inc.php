@@ -2,7 +2,7 @@
 
 function autoedit_theme($isrc)
 {
-	$src = infra_admin_cache('autoedit_theme', function ($isrc) {
+	$src = Access::adminCache('autoedit_theme', function ($isrc) {
 		$src = Path::theme($isrc);
 		if ($src) return $src;
 		$fdata = Load::srcInfo($isrc);
