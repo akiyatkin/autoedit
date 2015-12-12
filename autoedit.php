@@ -363,8 +363,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 						$newname = Path::tofs($ofile['name']);
 						$newfile = Path::theme($folder.$newname);
 
-						$newr = infra_nameinfo($newname);
-						$oldr = infra_nameinfo($oldname);
+						$newr = Load::nameInfo($newname);
+						$oldr = Load::nameInfo($oldname);
 						$oldr['name'] = preg_replace("/\s\(\d\)$/", '', $oldr['name']);
 						$newr['name'] = preg_replace("/\s\(\d\)$/", '', $newr['name']);
 						$newr['name'] = preg_replace("/^\./", '', $newr['name']);
@@ -411,7 +411,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$ans['take'] = false;
 			$ans['isfile'] = false;
 			$ans['msg'] = 'Файл ещё не существует, <br>рекомендуется для загрузки нового файла<br>скачать и поправить файл из другова<br>анологичного места. Если это возможно.';
-			$filed = infra_nameinfo($id);
+			$filed = Load::nameInfo($id);
 			$ans['ext'] = $filed['ext'];
 		} else {
 			$ans['isfile'] = true;
@@ -481,13 +481,12 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 
 	$ans['path'] = $id;
 	$ans['take'] = $take;
-	$fd=infra_nameinfo($file);
+	$fd=Load::nameInfo($file);
 	$ans['ext'] = $fd['ext'];
 } elseif ($type === 'editfolder') {
 	if (!$submit) {
 		$folder = $id;
-		$dirs = infra_dirs();
-		$parent = preg_replace("/^~/", $dirs['data'], $folder);
+		$parent = Path::resolve($folder);
 		
 		$p = explode('/', $parent);
 		array_pop($p);//'/'
@@ -515,7 +514,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$src=$folder.$file;
 			$file=Path::toutf($file);
 			
-			$fd=infra_nameinfo($file);
+			$fd=Load::nameInfo($file);
 			$fd['time']=filemtime($src);
 			
 			if (is_file($src)) {
@@ -554,12 +553,10 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	$file = Path::tofs($file[0]);
 	$origfile = $file;
 	$isfile = Path::theme($file);
-	$dirs=infra_dirs();
 	if ($isfile) {
 		$file = $isfile;
 	} else {
-		$file = preg_replace("/^~/", $dirs['data'], $file);
-		$file = preg_replace("/^\*/", $dirs['data'], $file);
+		$file = Path::resolve($file);
 	}
 
 	if (!$submit) {
@@ -608,8 +605,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		return Ans::ret($ans);
 	}
 } elseif ($type === 'seo') {
-	$dirs = infra_dirs();
-	$dir = $dirs['data'].'seo/';//stencil//
+	$dir = Path::resolve('~seo/');
 	$src = Path::tofs($id);
 	$src = str_replace('/', '-', $src);
 	$src = str_replace('..', '-', $src);
@@ -648,13 +644,14 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	}
 } elseif ($type === 'corfile') {
 	if (!$submit) {
-		$dirs=infra_dirs();
-		$folder = preg_replace("/^\*/", $dirs['data'], $id);
-		$folder = preg_replace("/^~/", $dirs['data'], $folder);
+
+		$folder = Path::resolve($id);
+
 		$path = explode('/', $folder);
 		$name = array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт всегда пустым
 		$parent = implode('/', $path).'/';
-		$parent = preg_replace("/^infra\/data\//", '~', $parent);
+		
+		$parent = Path::pretty($parent);
 
 		$ans['oldfolder'] = $parent;//Папка в которой можно увидеть обрабатываемую папку
 		$ans['oldname'] = $name;
@@ -714,8 +711,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 	if ($list) {
 		foreach ($list as $file) {
 			$d = Load::loadJSON($takepath.$file);
-			$dirs = infra_dirs();
-			$d['path'] = str_replace($dirs['data'], '~', $d['path']);
+			$d['path'] = Path::resolve($d['path']);
 
 			$d['modified'] = filemtime(Path::theme($d['path']));
 			preg_match("/\.([a-zA-Z]+)$/", $d['path'], $match);

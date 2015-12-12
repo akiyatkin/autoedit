@@ -1,5 +1,5 @@
 <?php
-
+use infrajs\path\Path;
 function autoedit_theme($isrc)
 {
 	$src = Access::adminCache('autoedit_theme', function ($isrc) {
@@ -16,7 +16,7 @@ function autoedit_theme($isrc)
 				return;
 			}
 			$file=Path::toutf($file);
-			$fd = infra_nameinfo($file);
+			$fd = Load::nameInfo($file);
 			
 			if ($fdata['id'] && $fdata['id'] != $fd['id']) {
 				return;
@@ -53,8 +53,7 @@ function autoedit_createPath($p, $path = '')
 	//if(!preg_match("/^\*/",$ifolder))return err($ans,'First symbol should be the asterisk *.');
 
 	if (is_string($p)) {
-		$dirs = infra_dirs();
-		$p = preg_replace("/^\*/", $dirs['data'], $p);
+		$p = Path::resolve($p);
 		$p = explode('/', $p);
 		$f = array_pop($p);//достали файл или пустой элемент у дирректории
 		$f = Path::tofs($f);
@@ -101,8 +100,7 @@ function autoedit_folder($file)
 }
 function autoedit_takepath($file = false)
 {
-	$dirs=infra_dirs();
-	$takepath = $dirs['cache'].'admin_takefiles/';
+	$takepath = Path::resolve('|admin_takefiles/');
 	if ($file === false) {
 		return $takepath;
 	}
