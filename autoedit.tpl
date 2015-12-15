@@ -83,7 +83,7 @@
 		</table>
 		<script>
 			infra.require('vendor/vsn4ik/bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js');
-			infra.loadCSS('*autoedit/autoedit.css');
+			infra.loadCSS('-autoedit/autoedit.css');
 			infra.when(infrajs,'onshow',function(){
 				var layer=infrajs.getUnickLayer("{id}");
 				var div=$('#'+layer.div);
@@ -195,7 +195,7 @@
 		{:submit}Сохранить{:/submit}
 		{:/form}
 		{image?:editfileimage}
-	{editfileimage:}<img style="margin-top:15px" src="?*imager/imager.php?w=300&src={folder}{file}">
+	{editfileimage:}<img style="margin-top:15px" src="?-imager/imager.php?w=300&src={folder}{file}">
 	{editishelp:}Файл уже есть, имя загружаемого файла должно быть<br><i>{file}</i><br><input type="checkbox" name="passname">Не проверять имя загружаемого файла.
 	{editishelpis:}Файла ещё нет, имя загружаемого файла не принимается во внимание, <br>будет установлено имя {file}
 	{editfileinfo:}
@@ -352,7 +352,7 @@
 			
 				<nobr class="action" style="visibility:hidden">
 					<a href="{pathload}"><img alt="load" 
-					title="Скачать" src="?*autoedit/images/floppy.png"></a>
+					title="Скачать" src="?-autoedit/images/floppy.png"></a>
 					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{file}')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
 					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{file}')" title="Переименовать/переместить" src="{infra.theme(:*autoedit/images/rename.png)}">
 					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{file}')" title="Создать копию" src="{infra.theme(:*autoedit/images/copy.png)}"> 
@@ -382,7 +382,7 @@
 					id:layer.id
 				};
 			});
-			var html=infra.template.parse('*autoedit/autoedit.tpl',list,'allblockslist');
+			var html=infra.template.parse('-autoedit/autoedit.tpl',list,'allblockslist');
 			var div=document.getElementById('allblockslist');
 			div.innerHTML=html;
 
@@ -470,48 +470,6 @@
 		{:newfilename}
 		{:submit}Применить{:/submit}
 	{:/form}
-
-{rte:}
-	{:style}
-	<div>
-		{:form}
-		<table style="margin-bottom:10px">
-		<tr>
-			<td>Папка:&nbsp;</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{data.folder}')">{data.folder}</span></td>
-		</tr>
-		<tr>
-			<td>Файл:</td><td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{config.id}')">{data.file}</span></td>
-		</tr>
-		</table>
-		<div id="rte"></div>
-		<script>
-		infra.when(infrajs,'onshow',function(){
-			var layer={
-				div:'rte',
-				external:'*autoedit/rte.layer.json',
-				jsontpl:'{json}',
-				dataroot:'data.content',
-				divparent:"popup_body",
-				config:{
-					getFolder:function(val){
-						return AUTOEDIT.getFolder(val);
-					},
-					name:'content',
-					height:300,
-					folder:'*files/'
-				},
-				configtpl:{
-					addimg:'*autoedit/autoedit.php?submit=1&type=addfile&id={{config.folder}}', //По этому адресу будет отправлена иллюстрация для сохранения. Ожидается что эта иллюстрация появится в папке folder
-					delimg:'*autoedit/autoedit.php?submit=1&type=deletefile&folder={{config.folder}}&id={{config.folder}}' //Сюда будет добавлено имя файла который нужно удалить
-				} //Имя и первоначальное значение для rte определяется в шаблоне
-			}
-			infrajs.check(layer);
-		});
-		</script>
-		{:submit}Сохранить{:/submit}
-		{:/form}
-
-	</div>
 {form:}
 	<form action="{infra.theme(:*autoedit/autoedit.php)}?submit=1" method="post">
 	<input type="hidden" name="type" value="{config.type}">
@@ -642,4 +600,4 @@
 	</div>
 
 {rteimg:}
-	<img title="{}" alt="{}" onclick="$('.imgsize').slideDown('fast'); $(this).parent().find('.select').removeClass('select'); $(this).addClass('select')" orig="{}" src="{infra.theme(*imager/imager.php)}?src={..folder}{}&w=100&h=100&crop=1">
+	<img title="{}" alt="{}" onclick="$('.imgsize').slideDown('fast'); $(this).parent().find('.select').removeClass('select'); $(this).addClass('select')" orig="{}" src="{infra.theme(-imager/imager.php)}?src={..folder}{}&w=100&h=100&crop=1">

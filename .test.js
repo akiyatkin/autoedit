@@ -5,7 +5,7 @@ infra.wait(infrajs,'onshow',function(){
 			test.check();
 		});
 	}
-	infra.require('*autoedit/autoedit.js');
+	infra.require('-autoedit/autoedit.js');
 
 
 

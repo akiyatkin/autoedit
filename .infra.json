@@ -1,5 +1,5 @@
 {
-	"infrajs_jsexts":{
-		"*autoedit/autoedit.ext.js":true
+	"autoedit":{
+		"tester":"-autoedit/tests/"
 	}
 }

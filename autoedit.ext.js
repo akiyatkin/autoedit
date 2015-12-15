@@ -10,7 +10,7 @@ infrajs.autoeditInit=function(){
 	$(document).bind('keydown',function(event){
 		if (event.keyCode == 113){
 			//infra.loader.show();
-			infra.require('*autoedit/autoedit.js');
+			infra.require('-autoedit/autoedit.js');
 			AUTOEDIT('admin');
 		}
 	});
@@ -18,7 +18,7 @@ infrajs.autoeditInit=function(){
 infrajs.autoeditLink=function(){//infrajs onshow
 	$('.showAdmin[showAdmin!=true]').attr('nohref','1').attr('showAdmin','true').click(function(){
 		infra.loader.show();
-		infra.require('*autoedit/autoedit.js');
+		infra.require('-autoedit/autoedit.js');
 		AUTOEDIT('admin');
 		return false;
 	});

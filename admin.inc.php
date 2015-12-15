@@ -1,5 +1,8 @@
 <?php
+
 use infrajs\path\Path;
+use infrajs\access\Access;
+use infrajs\load\Load;
 function autoedit_theme($isrc)
 {
 	$src = Access::adminCache('autoedit_theme', function ($isrc) {
@@ -92,7 +95,7 @@ function autoedit_folder($file)
 	$s = explode('/', $file);
 	$name = array_pop($s);
 	$folder = implode('/', $s);
-	if ($folder != '*') {
+	if ($folder != '-') {
 		$folder .= '/';
 	}
 
@@ -100,7 +103,7 @@ function autoedit_folder($file)
 }
 function autoedit_takepath($file = false)
 {
-	$takepath = Path::resolve('|admin_takefiles/');
+	$takepath = Path::resolve('!admin_takefiles/');
 	if ($file === false) {
 		return $takepath;
 	}
@@ -126,7 +129,7 @@ if (!function_exists('err')) {
 	function err($ans, $msg)
 	{
 		$ans['msg'] = $msg;
-		echo infra_json_encode($ans);
+		echo Load::json_encode($ans);
 	}
 }
 function autoedit_backup($file)

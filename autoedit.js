@@ -6,7 +6,7 @@ window.AUTOEDIT=function(type,id){
 	if(!self.popups[save]){
 		self.popups[save]={
 			AUTOEDIT:AUTOEDIT,//из-за menu depricated
-			external:'*autoedit/autoedit.layer.json',
+			external:'-autoedit/autoedit.layer.json',
 			showanimate:true,
 			config:{
 				type:type,
@@ -20,9 +20,9 @@ window.AUTOEDIT=function(type,id){
 
 
 AUTOEDIT.jsonedit=function(ta,schema){
-	infra.require('*autoedit/json.js');
-	infra.require('*autoedit/jsonedit.js');
-	infra.loadCSS('*autoedit/jsonwidget.css');
+	infra.require('-autoedit/json.js');
+	infra.require('-autoedit/jsonedit.js');
+	infra.loadCSS('-autoedit/jsonwidget.css');
 	jsonedit(ta,schema);
 }
 AUTOEDIT.menu=[
@@ -50,7 +50,7 @@ AUTOEDIT.menu=[
 ]
 AUTOEDIT.takefile=function(path,take){
 	take=take|'';
-	var src='*autoedit/autoedit.php?submit=1&type=takefile&id='+encodeURIComponent(path)+'&take='+take;
+	var src='-autoedit/autoedit.php?submit=1&type=takefile&id='+encodeURIComponent(path)+'&take='+take;
 	infra.unload(src);
 	var data=infra.loadJSON(src);
 	/*if(data.result&&!data.noaction){

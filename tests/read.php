@@ -14,7 +14,7 @@ $ans['title']='Общая проверка';
 Access::test(true);
 
 
-$res=Load::loadJSON('*autoedit/autoedit.php?type=editfile&id=*.infra.json');
+$res=Load::loadJSON('-autoedit/autoedit.php?type=editfile&id=~.infra.json');
 
 if (Access::admin()) {
 	if (!$res['result'] || !$res['isfile']) {
@@ -27,7 +27,7 @@ if (Access::admin()) {
 }
 
 
-$res=Load::loadJSON('*autoedit/autoedit.php?type=editfolder&id=~');
+$res=Load::loadJSON('-autoedit/autoedit.php?type=editfolder&id=~');
 
 if (Access::admin()) {
 	if (!$res['result'] || !sizeof($res['list'])) {

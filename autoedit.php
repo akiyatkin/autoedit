@@ -3,6 +3,8 @@ namespace infrajs\autoedit;
 use infrajs\load\Load;
 use infrajs\path\Path;
 use infrajs\ans\Ans;
+use infrajs\infra\Infra;
+use infrajs\infra\Each;
 use infrajs\access\Access;
 
 if (!is_file('vendor/autoload.php')) {
@@ -10,7 +12,7 @@ if (!is_file('vendor/autoload.php')) {
 	require_once('vendor/autoload.php');
 }
 
-Path::req('*autoedit/admin.inc.php');
+Path::req('-autoedit/admin.inc.php');
 
 $type = Path::toutf(@$_REQUEST['type']);
 $id = Path::toutf(@$_REQUEST['id']);
@@ -40,8 +42,8 @@ if (!Access::admin()) {
 }
 
 if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
-	if ($id{0} != '*') {
-		return Ans::err($ans, 'Путь должен быть тематический, начинаться с *.');
+	if ($id{0} != '~') {
+		return Ans::err($ans, 'Путь должен начинаться с ~');
 	}
 
 	
@@ -150,12 +152,15 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 } elseif (in_array($type, array('copyfile', 'deletefile', 'renamefile'))) {
 	if (!$submit) {
 		$ans['name'] = preg_replace("/(.*\/)*/", '', $id);
-		if ($ans['name'][0] == '*') {
-			$ans['name'] = preg_replace('/^\*/', '', $ans['name']);
-			$ans['folder'] = '*';
+		if ($ans['name'][0] == '-') {
+			$ans['name'] = preg_replace('/^\-/', '', $ans['name']);
+			$ans['folder'] = '-';
 		} else if ($ans['name'][0] == '~') {
 			$ans['name'] = preg_replace('/^\~/', '', $ans['name']);
 			$ans['folder'] = '~';
+		} else if ($ans['name'][0] == '!') {
+			$ans['name'] = preg_replace('/^\!/', '', $ans['name']);
+			$ans['folder'] = '!';
 		} else {
 			$ans['folder'] = str_replace($ans['name'], '', $id);
 		}
@@ -258,7 +263,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		}
 	}
 } elseif ($type == 'version') {
-	$tpl = Load::loadTEXT('*controller/version.tpl');
+	$tpl = Load::loadTEXT('-controller/version.tpl');
 	if (!$tpl) {
 		$tpl = 'Информация не указана.';
 	}
@@ -471,7 +476,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		//print_r($p);
 		
 
-		$ans['pathload'] = '?*autoedit/download.php?'.Path::toutf($id);
+		$ans['pathload'] = '?-autoedit/download.php?'.Path::toutf($id);
 		$ans['path'] = Path::toutf(Path::theme($ans['path']));
 	}
 } elseif ($type == 'takeinfo') {
@@ -539,7 +544,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$d = Load::loadJSON($takepath);
 				$v['corable'] = in_array(strtolower($v['ext']), $CORABLE);
 
-				$v['pathload'] = '?*autoedit/download.php?'.Path::toutf($file);
+				$v['pathload'] = '?-autoedit/download.php?'.Path::toutf($file);
 				
 				$v['mytake'] = autoedit_ismytake($file);
 				if ($d) {
@@ -581,12 +586,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			if (!autoedit_ext($file)) {
 				$file .= '.json';
 			}
-			//$file=Path::theme($file,'sfnm');//Создали путь до файла
-
-			//$f=preg_replace('/^\*/','*/',$file);
-			/*$p=explode('/',$f);
-			if($p[0]=='*')$p[0]='infra/data';
-			$f=array_pop($p);//достали файл*/
+			
 
 			$file = autoedit_createPath($origfile);
 
@@ -634,7 +634,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		} else {
 			$keys['page'] = $id;
 			$keys['time'] = time();
-			$r = file_put_contents($src, infra_json_encode($keys));
+			$r = file_put_contents($src, Load::json_encode($keys));
 		}
 		if ($r) {
 			return Ans::ret($ans, 'SEO-данные сохранены');
@@ -670,14 +670,9 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$file .= '.tpl';
 			}
 			$ans['msg'] .= 'Файл был создан<br>';
-			//$f=preg_replace('/^\*/','*/',Path::tofs($file));
-			/*$p=explode('/',$f);
-			if($p[0]=='*')$p[0]='infra/data';
-			$f=array_pop($p);//достали файл*/
+	
 			$file = autoedit_createPath($file);
-			//$file=Path::tofs($dir.$f);
-
-			//$file=Path::theme($file,'sfnm');//Создали путь до файла
+	
 
 			if (!$file) {
 				return Ans::err($ans, 'Не удалось создать путь до файла'.$id);
@@ -738,7 +733,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			} elseif ($take && !is_file($takepath)) {
 				//Повторно захватывать не будем
 				$save = array('path' => $id,'date' => time(),'ip' => $_SERVER['REMOTE_ADDR'],'browser' => $_SERVER['HTTP_USER_AGENT']);
-				$r = file_put_contents($takepath, infra_json_encode($save));
+				$r = file_put_contents($takepath, Load::json_encode($save));
 				if (!$r) {
 					return Ans::err('Неудалось захватить файл');
 				}
