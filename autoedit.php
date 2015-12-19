@@ -438,7 +438,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		if ($ans['rteable']) {
 			$ans['rteable'] = in_array(strtolower($ans['ext']), $RTEABLE);
 		}
-		$conf = Infra::config();
+		$conf = Config::get();
 		$imgext = $conf['imager']['images'];
 		Each::forr($imgext, function &($e) use (&$ans) {
 			if ($e == $ans['ext']) {
