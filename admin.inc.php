@@ -5,7 +5,7 @@ use infrajs\access\Access;
 use infrajs\load\Load;
 function autoedit_theme($isrc)
 {
-	$src = Access::adminCache('autoedit_theme', function ($isrc) {
+	$src = Access::cache('autoedit_theme', function ($isrc) {
 		$src = Path::theme($isrc);
 		if ($src) return $src;
 		$fdata = Load::srcInfo($isrc);

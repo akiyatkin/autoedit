@@ -1,5 +1,3 @@
 {
-	"autoedit":{
-		"tester":"-autoedit/tests/"
-	}
+	"tester":"tests/"
 }
