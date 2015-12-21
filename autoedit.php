@@ -4,7 +4,7 @@ use infrajs\load\Load;
 use infrajs\path\Path;
 use infrajs\ans\Ans;
 use infrajs\infra\Infra;
-use infrajs\infra\Each;
+use infrajs\each\Each;
 use infrajs\access\Access;
 
 if (!is_file('vendor/autoload.php')) {
