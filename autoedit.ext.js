@@ -29,7 +29,7 @@ infrajs.autoedit_SaveOpenedWin=function(){
 	for(var i in window.AUTOEDIT.popups){
 		var layer=window.AUTOEDIT.popups[i];
 		if(!layer.showed)continue;
-		infrajs.popup_memorize('infra.require("*autoedit/autoedit.js");AUTOEDIT("'+layer.config.type+'","'+layer.config.id+'");');
+		infrajs.popup_memorize('infra.require("-autoedit/autoedit.js");AUTOEDIT("'+layer.config.type+'","'+layer.config.id+'");');
 	}
 }
 

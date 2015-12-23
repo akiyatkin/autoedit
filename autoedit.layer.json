@@ -1,11 +1,11 @@
 {
-	"tpl":"*autoedit/autoedit.tpl",
+	"tpl":"-autoedit/autoedit.tpl",
 	"global":["autoedit"],
 	"tplroottpl":"{config.type}",
 	"autosave":{},
 	"autosavenametpl":"{config.type}|{config.id}",
 	"autofocus":true,
-	"jsontpl":"*autoedit/autoedit.php?id={config.id}&type={config.type}",
+	"jsontpl":"-autoedit/autoedit.php?id={config.id}&type={config.type}",
 	"config":{
 		"type":"type",
 		"id":"id",

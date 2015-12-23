@@ -154,7 +154,7 @@
 			</table>
 		{listtakefiles:}
 			<tr>
-			<td><img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"></td>
+			<td><img alt=" " src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
 			<td onclick="AUTOEDIT('editfile','{path}')" style="cursor:pointer; text-decoration:underline;">{path}</td>
 			<td onclick="AUTOEDIT('takeinfo','{path}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate,date)}</td>
 			<td>{$date(:_takedate,modified)}</td>
@@ -174,13 +174,13 @@
 				<td><span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfolder','{folder}')">{folder}</span></td></tr>
 			<tr><td>Файл:&nbsp;</td>
 				<td style="font-size:14px">
-					<img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"> 
+					<img alt=" " src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"> 
 					{data.isfile?:editfilea?file}
 					<span class="action">
 						{data.isfile?:editfileload}
 						{data.corable?:corable}
 						{data.isfile?:editfiledel}
-						<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{folder}{file}')" title="Переименовать" src="{infra.theme(:*autoedit/images/rename.png)}"> 
+						<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{folder}{file}')" title="Переименовать" src="{infra.theme(:-autoedit/images/rename.png)}"> 
 					</span>
 				</td></tr>
 				{data.isfile?:editfileinfo}
@@ -207,11 +207,11 @@
 	{editfilea:}
 		<a style="text-decoration:underline" title="Открыть файл в браузере" target="_blank" href="{path}">{file}</a>&nbsp;
 	{editfileload:}
-		<a href="{pathload}" onclick="AUTOEDIT.takefile('{config.id}',true)"><img alt="load" title="Скачать" src="{infra.theme(:*autoedit/images/floppy.png)}"></a>
+		<a href="{pathload}" onclick="AUTOEDIT.takefile('{config.id}',true)"><img alt="load" title="Скачать" src="{infra.theme(:-autoedit/images/floppy.png)}"></a>
 	{editfiledel:}
-		<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{folder}{file}')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
+		<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{folder}{file}')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
 	{corable:}
-		<img alt="edit" style="cursor:pointer" onclick="AUTOEDIT('corfile','{folder}{file}');" title="Редактировать" src="{infra.theme(:*autoedit/images/edit.png)}"> 
+		<img alt="edit" style="cursor:pointer" onclick="AUTOEDIT('corfile','{folder}{file}');" title="Редактировать" src="{infra.theme(:-autoedit/images/edit.png)}"> 
 		{data.rteable?:rteable}
 	{getfile:}
 		<div style="margin:5px">
@@ -225,7 +225,7 @@
 		<span style="color:darkgreen">Файл можно редактировать</span>
 		
 	{rteable:}
-		<img alt="rte" style="cursor:pointer" onclick="AUTOEDIT('rte','{folder}{file}');" title="Визуальный редактор" src="{infra.theme(:*autoedit/images/rte.png)}">
+		<img alt="rte" style="cursor:pointer" onclick="AUTOEDIT('rte','{folder}{file}');" title="Визуальный редактор" src="{infra.theme(:-autoedit/images/rte.png)}">
 {takeinfo:}
 	{data.take?data:takeyes?data:takeno}
 	{takeno:} 
@@ -234,7 +234,7 @@
 		<span class="btn btn-default btn-xs" onclick="popup.hide();AUTOEDIT.takefile('{data.path}',true)">Занять</span>
 	{takeyes:}
 		<table style="font-size:12px">
-			<tr><th>Файл</th><td><img alt=" " src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"> <span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span></td></tr>
+			<tr><th>Файл</th><td><img alt=" " src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"> <span class="btn btn-default btn-xs" onclick="AUTOEDIT('editfile','{data.path}')">{data.path}</span></td></tr>
 			<tr><th>Дата отметки</th><td>{$date(:_takedate,data.take.date)}</td></tr>
 			<tr><th>IP:</th><td>{data.take.ip|}</td></tr>
 			<tr><th>Браузер:</th><td>{data.take.browser|}</td></tr>
@@ -309,7 +309,7 @@
 	{edftop:}
 		<tr>
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.parent}')">
-				<img src="{infra.theme(:*autoedit/icons/dir.png)}" title="dir">
+				<img src="{infra.theme(:-autoedit/icons/dir.png)}" title="dir">
 			</td>
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.parent}')">
 				..
@@ -320,22 +320,22 @@
 		</tr>
 	{folders:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')"><img src="{infra.theme(:*autoedit/icons/)}dir.png" title="dir"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')"><img src="{infra.theme(:-autoedit/icons/)}dir.png" title="dir"></td>
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')">
 				{name}
 			</td>
 			<td>&nbsp;</td><td>{~date(:d.m.Y,time)}</td>
 			<td>
 				<span class="action" style="visibility:hidden">
-					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('rmdir','{data.id}{name}/')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
-					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('mvdir','{data.id}{name}/')" title="Переименовать" src="{infra.theme(:*autoedit/images/rename.png)}">
-					<!--<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('cpdir','{data.id}{name}/')" title="Создать копию" src="{:*autoedit/images/copy.png}"> -->
+					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('rmdir','{data.id}{name}/')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
+					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('mvdir','{data.id}{name}/')" title="Переименовать" src="{infra.theme(:-autoedit/images/rename.png)}">
+					<!--<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('cpdir','{data.id}{name}/')" title="Создать копию" src="{:-autoedit/images/copy.png}"> -->
 				</span>
 			</td>
 		</tr>
 	{file:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')"><img alt="" src="{infra.theme(:*autoedit/icons/)}{ext}.png" title="{ext}"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')"><img alt="" src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
 			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')">
 				{file}{:strtake}
 			</td>
@@ -353,17 +353,17 @@
 				<nobr class="action" style="visibility:hidden">
 					<a href="{pathload}"><img alt="load" 
 					title="Скачать" src="?-autoedit/images/floppy.png"></a>
-					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{file}')" title="Удалить" src="{infra.theme(:*autoedit/images/delete.png)}"> 
-					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{file}')" title="Переименовать/переместить" src="{infra.theme(:*autoedit/images/rename.png)}">
-					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{file}')" title="Создать копию" src="{infra.theme(:*autoedit/images/copy.png)}"> 
+					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{file}')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
+					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{file}')" title="Переименовать/переместить" src="{infra.theme(:-autoedit/images/rename.png)}">
+					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{file}')" title="Создать копию" src="{infra.theme(:-autoedit/images/copy.png)}"> 
 					{corable?:cancorfile}
 					{rteable?:filerteable}
 				</nobr>
 			
 	{cancorfile:}
-			<img alt="edit" style="cursor:pointer" onclick="AUTOEDIT('corfile','{data.id}{name}{ext?:point}{ext}');" title="Редактировать" src="{infra.theme(:*autoedit/images/edit.png)}"> 
+			<img alt="edit" style="cursor:pointer" onclick="AUTOEDIT('corfile','{data.id}{name}{ext?:point}{ext}');" title="Редактировать" src="{infra.theme(:-autoedit/images/edit.png)}"> 
 	{filerteable:}
-		<img alt="rte" style="cursor:pointer" onclick="AUTOEDIT('rte','{config.id}{name}{ext?:point}{ext}');" title="Визуальный редактор" src="{infra.theme(:*autoedit/images/rte.png)}"> 
+		<img alt="rte" style="cursor:pointer" onclick="AUTOEDIT('rte','{config.id}{name}{ext?:point}{ext}');" title="Визуальный редактор" src="{infra.theme(:-autoedit/images/rte.png)}"> 
 {404:}
 	Информация по слою не найдена
 {allblocks:}
@@ -471,7 +471,7 @@
 		{:submit}Применить{:/submit}
 	{:/form}
 {form:}
-	<form action="{infra.theme(:*autoedit/autoedit.php)}?submit=1" method="post">
+	<form action="{infra.theme(:-autoedit/autoedit.php)}?submit=1" method="post">
 	<input type="hidden" name="type" value="{config.type}">
 	<input type="hidden" name="id" value="{config.id}">
 {/form:}
