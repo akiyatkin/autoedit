@@ -195,7 +195,7 @@
 		{:submit}Сохранить{:/submit}
 		{:/form}
 		{image?:editfileimage}
-	{editfileimage:}<img style="margin-top:15px" src="?-imager/imager.php?w=300&src={folder}{file}">
+	{editfileimage:}<img style="margin-top:15px" src="/-imager/?w=300&src={folder}{file}">
 	{editishelp:}Файл уже есть, имя загружаемого файла должно быть<br><i>{file}</i><br><input type="checkbox" name="passname">Не проверять имя загружаемого файла.
 	{editishelpis:}Файла ещё нет, имя загружаемого файла не принимается во внимание, <br>будет установлено имя {file}
 	{editfileinfo:}
@@ -352,7 +352,7 @@
 			
 				<nobr class="action" style="visibility:hidden">
 					<a href="{pathload}"><img alt="load" 
-					title="Скачать" src="?-autoedit/images/floppy.png"></a>
+					title="Скачать" src="/-autoedit/images/floppy.png"></a>
 					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('deletefile','{data.id}{file}')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
 					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('renamefile','{data.id}{file}')" title="Переименовать/переместить" src="{infra.theme(:-autoedit/images/rename.png)}">
 					<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('copyfile','{data.id}{file}')" title="Создать копию" src="{infra.theme(:-autoedit/images/copy.png)}"> 
@@ -545,7 +545,7 @@
 {seo:}
 	{infrajs.seo.get():seotpl}
 {seotpl:}
-	Страница: <b><a href="?{data.id}">{data.id|:Главная}</a></b>
+	Страница: <b><a href="/{data.id}">{data.id|:Главная}</a></b>
 	{:form}
 
 	<h2>Заголовок - Title</h2>
