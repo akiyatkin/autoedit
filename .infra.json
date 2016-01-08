@@ -1,3 +1,5 @@
 {
-	"tester":"tests/"
+	"tester":"tests/",
+	"js":["autoedit.ext.js"],
+	"dependencies":["event"]
 }
