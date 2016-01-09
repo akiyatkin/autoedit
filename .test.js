@@ -1,7 +1,7 @@
-infra.wait(infrajs,'onshow',function(){
+Event.one('Infrajs.onshow', function () {
 	var test=infra.test;
 	test.onshowcheck=function(){
-		infra.when(infrajs,'onshow',function(){
+		Event.onext('Infrajs.onshow', function(){
 			test.check();
 		});
 	}

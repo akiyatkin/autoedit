@@ -190,4 +190,4 @@ AUTOEDIT.refreshAll=function(){
 	var store=infra.template.store();
 	store.cache={};
 }
-infra.fire(infra,'AUTOEDIT');
+//Event.fire('AUTOEDIT');

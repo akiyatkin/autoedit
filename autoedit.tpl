@@ -84,7 +84,7 @@
 		<script>
 			infra.require('vendor/vsn4ik/bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js');
 			infra.loadCSS('-autoedit/autoedit.css');
-			infra.when(infrajs,'onshow',function(){
+			Event.onext('Infrajs.onshow', function(){
 				var layer=infrajs.getUnickLayer("{id}");
 				var div=$('#'+layer.div);
 				var box=div.find('[name="autoblockeditor"]');
@@ -370,7 +370,7 @@
 	<h1>Блоки на открытой странице</h1>
 	<div id="allblockslist"></div>
 	<script>
-		infra.wait(infrajs,'onshow',function(){
+		Event.one('Infrajs.onshow', function(){
 			var list={ };
 			infrajs.run(infrajs.getAllLayers(),function(layer){
 				if(!layer.showed)return;
@@ -421,7 +421,7 @@
 		{:submit}Сохранить{:/submit}
 	{:/form}
 	<script type="text/javascript">
-		infra.wait(infrajs,'oncheck',function(){
+		Event.one('Infrajs.oncheck', function(){
 
 			var layer=infrajs.getUnickLayer("{id}");
 			var ta=$('#'+layer.div).find('textarea').get(0);
