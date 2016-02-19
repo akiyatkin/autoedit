@@ -263,11 +263,31 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		}
 	}
 } elseif ($type == 'version') {
-	$tpl = Load::loadTEXT('-controller/version.tpl');
-	if (!$tpl) {
-		$tpl = 'Информация не указана.';
+	$data = Load::loadJSON('composer.lock');
+	$ar=array();
+	foreach($data['packages'] as $k=>$v){
+		$homepage=$v['homepage'];
+		if(!$homepage&&!empty($v['source'])) $homepage = $v['source']['url'];
+		$d=array(
+			"name"=>$v['name'],
+			"version"=>$v['version'],
+			"time"=>$v['time'],
+			"description"=>$v['description'],
+			"homepage"=>$homepage
+		);
+		$ar[]=$d;
 	}
-	$ans['info'] = $tpl;
+	usort($ar,function ($a, $b) {
+		$a=$a['time'];
+		$b=$b['time'];
+	    if ($a == $b) {
+	        return 0;
+	    }
+	    return ($a < $b) ? 1 : -1;
+	});
+	$ans['data'] = $ar;
+	return Ans::ret($ans);
+	
 } elseif ($type == 'addfile') {
 	if (!$submit) {
 		$name = $_REQUEST['name'];

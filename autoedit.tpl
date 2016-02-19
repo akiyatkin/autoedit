@@ -118,7 +118,11 @@
 		</div>
 {version:}
 	<h1>Информация о версии системы</h1>
-	{data.info}
+	Последнее обнволение {data.data.0.time}
+	<table class="table table-striped">
+	{data.data::verrow}
+	</table>
+	{verrow:}<tr><td><b><a title="{time}" href="{homepage}" style="white-space:nowrap">{name}</a></b><br>{version}</td><td>{description}</td></tr>
 {addfile:}
 	<h1>Загрузить файл</h1>
 	{:form}
