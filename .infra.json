@@ -1,5 +1,6 @@
 {
 	"tester":"tests/",
 	"js":["autoedit.ext.js"],
-	"dependencies":["event"]
+	"dependencies":["path","event"],
+	"update":"update.php"
 }
