@@ -497,8 +497,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		//print_r($p);
 		
 
-		$ans['pathload'] = '?-autoedit/download.php?'.Path::toutf($id);
-		$ans['path'] = Path::toutf(Path::theme($ans['path']));
+		$ans['pathload'] = '/-autoedit/download.php?'.Path::toutf($id);
+		$ans['path'] = $ans['path'];
 	}
 } elseif ($type == 'takeinfo') {
 	$file = autoedit_theme($id);
@@ -554,7 +554,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$list=array_reverse($list);
 		
 		$folder = Path::toutf($folder);
-		$folder = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $folder);
+		$folder = Path::pretty($folder);
 		$ans['list'] = $list;
 		$ans['folders'] = $folders;
 		if ($ans['list']) {
@@ -565,7 +565,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$d = Load::loadJSON($takepath);
 				$v['corable'] = in_array(strtolower($v['ext']), $CORABLE);
 
-				$v['pathload'] = '?-autoedit/download.php?'.Path::toutf($file);
+				$v['pathload'] = '/-autoedit/download.php?'.Path::toutf($file);
 				
 				$v['mytake'] = autoedit_ismytake($file);
 				if ($d) {

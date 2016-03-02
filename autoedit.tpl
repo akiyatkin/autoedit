@@ -160,8 +160,8 @@
 			<tr>
 			<td><img alt=" " src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
 			<td onclick="AUTOEDIT('editfile','{path}')" style="cursor:pointer; text-decoration:underline;">{path}</td>
-			<td onclick="AUTOEDIT('takeinfo','{path}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate,date)}</td>
-			<td>{$date(:_takedate,modified)}</td>
+			<td onclick="AUTOEDIT('takeinfo','{path}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate, date)}</td>
+			<td>{$date(:_takedate, modified)}</td>
 			<td>{ip}</td>
 			</tr>
 		{nolistshow:}
@@ -209,7 +209,7 @@
 			<td>{~date(:_takedate,time)}</td></tr>
 	{_takedate:}H:i d.m.Y
 	{editfilea:}
-		<a style="text-decoration:underline" title="Открыть файл в браузере" target="_blank" href="{path}">{file}</a>&nbsp;
+		<a style="text-decoration:underline" title="Открыть файл в браузере" target="_blank" href="/{path}">{file}</a>&nbsp;
 	{editfileload:}
 		<a href="{pathload}" onclick="AUTOEDIT.takefile('{config.id}',true)"><img alt="load" title="Скачать" src="{infra.theme(:-autoedit/images/floppy.png)}"></a>
 	{editfiledel:}
@@ -395,7 +395,7 @@
 			div=$(div);
 			for(var i in list){
 				(function(){
-					var block=list[i];
+					var block = list[i];
 					div.find('.block'+i).click(function(){
 						AUTOEDIT.checkLayer(block.layer);
 					});
