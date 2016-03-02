@@ -3,6 +3,7 @@ namespace infrajs\autoedit;
 use infrajs\load\Load;
 use infrajs\path\Path;
 use infrajs\ans\Ans;
+use infrajs\config\Config;
 use infrajs\infra\Infra;
 use infrajs\each\Each;
 use infrajs\access\Access;
@@ -458,8 +459,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		if ($ans['rteable']) {
 			$ans['rteable'] = in_array(strtolower($ans['ext']), $RTEABLE);
 		}
-		$conf = Config::get();
-		$imgext = $conf['imager']['images'];
+		$conf = Config::get('imager');
+		$imgext = $conf['images'];
 		Each::forr($imgext, function &($e) use (&$ans) {
 			if ($e == $ans['ext']) {
 				$ans['image'] = true;
