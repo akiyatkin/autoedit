@@ -70,8 +70,9 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$path = explode('/', $id);
 			array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт всегда пустым
 			$name = array_pop($path);
-			$name = preg_replace("/^\*/", '', $name);
+			$name = preg_replace("/^\-/", '', $name);
 			$name = preg_replace("/^\~/", '', $name);
+			$name = preg_replace("/^\!/", '', $name);
 			$parent = implode('/', $path);
 			if (!$parent) {
 				$parent = '~';
@@ -413,7 +414,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 						if (!$ext) {
 							$file .= $extload;
 						}
-						$file = preg_replace('/^\*/', 'infra/data/', $file);
+						$file = Path::resolve($file);//preg_replace('/^\*/', 'infra/data/', $file);
 					}
 					if (!is_file($ofile['tmp_name'])) {
 						return err($ans, 'Не найден загруженный файл '.Path::toutf($ofile['name']));
@@ -520,7 +521,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$parent = implode('/', $p).'/';// *Разделы/
 
 		
-		$parentN = preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $parent);
+		$parentN = Path::pretty($parent);//preg_replace('/^'.str_replace('/', '\/', $dirs['data']).'/', '~', $parent);
 		if ($parentN!=$parent) {
 			$ans['parent'] = $parentN;
 		}
@@ -590,7 +591,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$name = array_pop($path);//Так как папка заканчивается на / последний элемент в массиве буедт именем файла
 		$parent = implode('/', $path).'/';
 		
-		$parent = preg_replace("/^infra\/data\//", '~', $parent);
+		$parent = Path::pretty($parent); //preg_replace("/^infra\/data\//", '~', $parent);
 
 		$ans['oldfolder'] = Path::toutf($parent);//Папка в которой можно увидеть обрабатываемую папку
 		$ans['oldname'] = Path::toutf($name);
