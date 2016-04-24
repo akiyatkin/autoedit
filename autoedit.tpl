@@ -118,11 +118,11 @@
 		</div>
 {version:}
 	<h1>Информация о версии системы</h1>
-	Последнее обнволение {data.data.0.time}
+	Последнее обнволение {~date(:j F Y,data.data.0.time)} г.
 	<table class="table table-striped">
 	{data.data::verrow}
 	</table>
-	{verrow:}<tr><td><b><a title="{time}" href="{homepage}" style="white-space:nowrap">{name}</a></b><br>{version}</td><td>{description}</td></tr>
+	{verrow:}<tr><td><b><a title="{~date(:j F Y,time)}" href="{homepage}" style="white-space:nowrap">{name}</a></b><br>{version}</td><td>{description}</td></tr>
 {addfile:}
 	<h1>Загрузить файл</h1>
 	{:form}

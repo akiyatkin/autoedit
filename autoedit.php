@@ -273,7 +273,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$d=array(
 			"name"=>$v['name'],
 			"version"=>$v['version'],
-			"time"=>$v['time'],
+			"time"=>strtotime($v['time']),
 			"description"=>$v['description'],
 			"homepage"=>$homepage
 		);
