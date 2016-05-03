@@ -180,9 +180,10 @@ AUTOEDIT.checkLayer=function(layer){
 	}
 }
 AUTOEDIT.refreshAll=function(){
-	infra.store();
-	if (infra.admin(true)) infra.theme.prefix = '-nostore=true';
+	//infra.store();
+	/*if (infra.admin(true)) infra.theme.prefix = '-nostore=true';
 	else  infra.theme.prefix = '';
+	console.log('refresh');*/
 	var store=infra.store();
 	store['loadJSON']={};
 	store['loadTEXT']={};

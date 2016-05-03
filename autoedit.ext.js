@@ -36,7 +36,9 @@ infrajs.autoedit_SaveOpenedWin=function(){
 
 Event.one('Infrajs.oninit',function(){
 	//autoedit
-	if (infra.admin()) infra.theme.prefix = '-nostore=true';
+	if (infra.admin(true)) infra.theme.prefix = '-nostore=true';
+	else  infra.theme.prefix = '';
+
 	infrajs.autoeditInit();	
 });
 

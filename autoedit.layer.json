@@ -11,11 +11,15 @@
 		"id":"id",
 		"ans":false//Ответ после отправки на сервер хранится тут
 	},
-	"onsubmit":function(layer){
-		var ans=layer.config.ans;
-		if(ans&&ans.close)popup.hide();
-		if(ans&&ans.result)infrajs.autosave.clear(layer);//Обнулили сохранённые введённые значения пользователя
-		
+	"onsubmit":function (layer) {
+		var ans = layer.config.ans;
+		if (ans&&ans.close) popup.hide();
+		if (ans&&ans.result) infrajs.autosave.clear(layer);//Обнулили сохранённые введённые значения пользователя
+
+		if (ans&&ans.type=='admin') {
+			if (ans.admin) infra.theme.prefix = '-nostore=true';
+			else infra.theme.prefix = ''
+		}
 		AUTOEDIT.refreshAll();
 	}
 }
