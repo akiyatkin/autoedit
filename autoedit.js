@@ -181,6 +181,8 @@ AUTOEDIT.checkLayer=function(layer){
 }
 AUTOEDIT.refreshAll=function(){
 	infra.store();
+	if (infra.admin(true)) infra.theme.prefix = '-nostore=true';
+	else  infra.theme.prefix = '';
 	var store=infra.store();
 	store['loadJSON']={};
 	store['loadTEXT']={};

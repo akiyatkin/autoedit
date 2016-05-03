@@ -475,7 +475,7 @@
 		{:submit}Применить{:/submit}
 	{:/form}
 {form:}
-	<form action="{infra.theme(:-autoedit/autoedit.php)}?submit=1" method="post">
+	<form action="/-autoedit/autoedit.php?submit=1" method="post">
 	<input type="hidden" name="type" value="{config.type}">
 	<input type="hidden" name="id" value="{config.id}">
 {/form:}
