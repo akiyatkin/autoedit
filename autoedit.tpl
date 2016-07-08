@@ -324,23 +324,23 @@
 		</tr>
 	{folders:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')"><img src="{infra.theme(:-autoedit/icons/)}dir.png" title="dir"></td>
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{name}/')">
-				{name}
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{file}/')"><img src="{infra.theme(:-autoedit/icons/)}dir.png" title="dir"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfolder','{data.id}{file}/')">
+				{file}
 			</td>
 			<td>&nbsp;</td><td>{~date(:d.m.Y,time)}</td>
 			<td>
 				<span class="action" style="visibility:hidden">
-					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('rmdir','{data.id}{name}/')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
-					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('mvdir','{data.id}{name}/')" title="Переименовать" src="{infra.theme(:-autoedit/images/rename.png)}">
+					<img alt="del" style="cursor:pointer" onclick="AUTOEDIT('rmdir','{data.id}{file}/')" title="Удалить" src="{infra.theme(:-autoedit/images/delete.png)}"> 
+					<img alt="name" style="cursor:pointer" onclick="AUTOEDIT('mvdir','{data.id}{file}/')" title="Переименовать" src="{infra.theme(:-autoedit/images/rename.png)}">
 					<!--<img alt="copy" style="cursor:pointer" onclick="AUTOEDIT('cpdir','{data.id}{name}/')" title="Создать копию" src="{:-autoedit/images/copy.png}"> -->
 				</span>
 			</td>
 		</tr>
 	{file:}
 		<tr style="color:{take?red}" onmouseover="$(this).find('.action').css('visibility','visible')" onmouseout="$(this).find('.action').css('visibility','hidden')">
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')"><img alt="" src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
-			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{name}{ext?:point}{ext}')">
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{file}')"><img alt="" src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
+			<td style="cursor:pointer" onclick="AUTOEDIT('editfile','{data.id}{file}')">
 				{file}{:strtake}
 			</td>
 			<td>{size}</td><td>{~date(:d.m.Y,time)}</td>

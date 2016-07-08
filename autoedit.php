@@ -396,7 +396,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 						$newr['name'] = preg_replace("/\s\(\d\)$/", '', $newr['name']);
 						$newr['name'] = preg_replace("/^\./", '', $newr['name']);
 						$oldr['name'] = preg_replace("/^\./", '', $oldr['name']);
-						$ans['dddd'] = $oldr;
+						//$ans['dddd'] = $oldr;
 
 						if (!@$_REQUEST['passname'] && ($newr['name'] != $oldr['name'] || $newr['ext'] != $oldr['ext'])) {
 							return Ans::err($ans, 'Имя загружаемого файла и расширение должны совпадать с текущим файлом, кроме (1) и точки в начале имени. Текущий файл '.$newr['name'].'.'.$newr['ext']);
@@ -532,8 +532,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			return Ans::err($ans, 'Нет такой папки');
 		}
 		;
-		$list=array();
-		$folders=array();
+		$list = array();
+		$folders = array();
 		array_map(function ($file) use (&$list, &$folders, $folder) {
 			if ($file=='.' || $file=='..') {
 				return;
@@ -541,8 +541,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$src=$folder.$file;
 			$file=Path::toutf($file);
 			
-			$fd=Load::nameInfo($file);
-			$fd['time']=filemtime($src);
+			$fd = Load::nameInfo($file);
+			$fd['time'] = filemtime($src);
 			
 			if (is_file($src)) {
 				$fd['size']=round(filesize($src)/1000,2);
@@ -551,8 +551,21 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				$folders[]=$fd;
 			}
 		}, scandir($folder));
-		$folders=array_reverse($folders);
-		$list=array_reverse($list);
+
+		usort($folders, function ($a, $b) {
+			$aa = (int) $a['num'];
+			$bb = (int) $b['num'];
+			if ($aa || $bb) {
+				if ($aa == $bb) return 0;
+				if(!$aa) return 1;
+				return ($aa > $bb) ? 1 : -1;
+			}
+			$aa = $a['name'];
+			$bb = $b['name'];
+			return strcasecmp($aa, $bb);
+		});
+		//$folders = array_reverse($folders);
+		//$list = array_reverse($list);
 		
 		$folder = Path::toutf($folder);
 		$folder = Path::pretty($folder);
