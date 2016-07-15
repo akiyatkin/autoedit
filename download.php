@@ -1,10 +1,19 @@
 <?php
 use infrajs\once\Once;
+use infrajs\path\Path;
+use infrajs\ans\Ans;
+use infrajs\access\Access;
 /*
 Copyright 2008-2010 http://itlife-studio.ru
 
 */
+if (!is_file('vendor/autoload.php')) {
+	chdir('../../../'); //Согласно фактическому расположению файла
+	require_once('vendor/autoload.php');
+	Router::init();
+}
 
+Access::admin(true);
 
 if (!function_exists('file_download')) {
 	function infra_download_browser($agent = false)
@@ -112,7 +121,8 @@ if (!function_exists('file_download')) {
 		}
 	}
 }
-$file = urldecode($_SERVER['QUERY_STRING']);
+$file = Ans::GET('src');
+//$file = urldecode($_SERVER['QUERY_STRING']);
 
 $set = 'fn';
 $path = Path::theme($file, $set);
