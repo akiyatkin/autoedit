@@ -461,7 +461,8 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$ans['rteable'] = in_array(strtolower($ans['ext']), $RTEABLE);
 		}
 		$conf = Config::get('imager');
-		$imgext = $conf['images'];
+		if (!empty($conf['images'])) $imgext = $conf['images'];
+		else $imgext = array();
 		Each::forr($imgext, function &($e) use (&$ans) {
 			if ($e == $ans['ext']) {
 				$ans['image'] = true;
