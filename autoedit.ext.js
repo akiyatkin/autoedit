@@ -34,7 +34,7 @@ infrajs.autoedit_SaveOpenedWin=function(){
 }
 
 
-Event.one('Infrajs.oninit',function(){
+Event.one('Controller.oninit',function(){
 	//autoedit
 	if (infra.admin(true)) infra.theme.prefix = 'infrajs=a&-nostore=true';//fix mod security
 	else  infra.theme.prefix = '';
@@ -42,18 +42,18 @@ Event.one('Infrajs.oninit',function(){
 	infrajs.autoeditInit();	
 });
 
-Event.handler('Infrajs.onshow',function(){
+Event.handler('Controller.onshow',function(){
 	//autoedit
 	infrajs.autoeditLink();
 });
-Event.handler('Infrajs.onshow',function(){
+Event.handler('Controller.onshow',function(){
 	//autoedit
 	if(!window.AUTOEDIT)return;
 	if(!AUTOEDIT.active)return;
 	if(!infra.admin())return;
 	AUTOEDIT.setHandlers();
 });
-Event.handler('Infrajs.onshow',function(){
+Event.handler('Controller.onshow',function(){
 	//autoedit
 	infrajs.autoedit_SaveOpenedWin();
 });

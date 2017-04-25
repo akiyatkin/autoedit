@@ -15,9 +15,9 @@ if (!is_file('vendor/autoload.php')) {
 
 Path::req('-autoedit/admin.inc.php');
 
-$type = Path::toutf(@$_REQUEST['type']);
-$id = Path::toutf(@$_REQUEST['id']);
-$submit = (bool) @$_REQUEST['submit'];
+$type = Ans::REQ('type','string');
+$id = Ans::REQ('id','string');
+$submit = Ans::REQ('submit','bool');
 
 $RTEABLE = array('tpl','html','htm','');
 $CORABLE = array('json','tpl','html','htm','txt','js','css','');
@@ -27,7 +27,7 @@ if (in_array($type, array('admin'))) {
 	if (!$submit) {
 		$ans['admin'] = Access::admin();
 	} else {
-		$ans['admin'] = Access::admin(array(@$_REQUEST['login'], @$_REQUEST['pass']));
+		$ans['admin'] = Access::admin(array(Ans::REQ('login'), Ans::REQ('pass')));
 		if (!$ans['admin']) {
 			if (isset($_REQUEST['login'])) {
 				return Ans::err($ans, 'Неправильный пароль!');
@@ -119,7 +119,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			}
 		}
 		if ($type === 'mvdir') {
-			if (@rename(Path::theme($oldfolder).Path::tofs($oldname).'/', Path::theme($newfolder).Path::tofs($newname).'/')) {
+			if (rename(Path::theme($oldfolder).Path::tofs($oldname).'/', Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;
 
 				return Ans::ret($ans, 'Директория переименована.');
@@ -127,14 +127,14 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				return Ans::err($ans, 'Не удалось переименовать директорию.');
 			}
 		} elseif ($type === 'mkdir') {
-			if (@mkdir(Path::theme($newfolder).Path::tofs($newname).'/')) {
+			if (mkdir(Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;//Сигнал окну закрыться
 				return Ans::ret($ans, 'Директория создана');
 			} else {
 				return Ans::err($ans, 'Создать директорию не получилось.');
 			}
 		} elseif ($type === 'cpdir') {
-			if (@copy(Path::theme($oldfolder).Path::tofs($oldname), Path::theme($newfolder).Path::tofs($newname).'/')) {
+			if (copy(Path::theme($oldfolder).Path::tofs($oldname), Path::theme($newfolder).Path::tofs($newname).'/')) {
 				$ans['close'] = 1;
 
 				return Ans::ret($ans, 'Директория скопирована');
@@ -142,7 +142,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 				return Ans::err($ans, 'Скопировать директорию не получилось.');
 			}
 		} elseif ($type === 'rmdir') {
-			if (@rmdir(Path::theme($oldfolder).Path::tofs($oldname))) {
+			if (rmdir(Path::theme($oldfolder).Path::tofs($oldname))) {
 				$ans['close'] = 1;
 
 				return Ans::ret($ans, 'Директория удалена.');
@@ -198,7 +198,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			if (is_string($msg)) {
 				return Ans::err($ans, $msg);
 			}
-			$r = @unlink($file);
+			$r = unlink($file);
 			if (!$r) {
 				return Ans::err($ans, 'Неудалось удалить файл. Возможно нет прав, если это скрытый файл в windows.');
 			}
@@ -210,7 +210,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 			$oldname = Path::tofs($_REQUEST['oldname']);
 			$oldfile = Path::theme($oldfolder.$oldname);
 			if (!is_file($oldfile)) {
-				return Ans::err($ans, 'Не найден оригинальный файл'.Path::toutf(@$_REQUEST['oldold']));
+				return Ans::err($ans, 'Не найден оригинальный файл'.Path::toutf(Ans::REQ('oldold')));
 			}
 			$takepath = autoedit_takepath($oldfile);
 

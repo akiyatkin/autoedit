@@ -1,7 +1,7 @@
-Event.one('Infrajs.onshow', function () {
+Event.one('Controller.onshow', function () {
 	var test=infra.test;
 	test.onshowcheck=function(){
-		Event.onext('Infrajs.onshow', function(){
+		Event.onext('Controller.onshow', function(){
 			test.check();
 		});
 	}
