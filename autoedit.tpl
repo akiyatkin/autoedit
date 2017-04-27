@@ -84,8 +84,8 @@
 		<script>
 			infra.require('vendor/vsn4ik/bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js');
 			infra.loadCSS('-autoedit/autoedit.css');
-			Event.onext('Infrajs.onshow', function(){
-				var layer=infrajs.getUnickLayer("{id}");
+			Event.onext('Controller.onshow', function(){
+				var layer=Controller.ids["{id}"];
 				var div=$('#'+layer.div);
 				var box=div.find('[name="autoblockeditor"]');
 
@@ -158,7 +158,7 @@
 			</table>
 		{listtakefiles:}
 			<tr>
-			<td><img alt=" " src="{infra.theme(:-autoedit/icons/)}{ext}.png" title="{ext}"></td>
+			<td><img alt=" " src="/-autoedit/icons/{ext}.png" title="{ext}"></td>
 			<td onclick="AUTOEDIT('editfile','{path}')" style="cursor:pointer; text-decoration:underline;">{path}</td>
 			<td onclick="AUTOEDIT('takeinfo','{path}')" style="cursor:pointer; text-decoration:underline;">{$date(:_takedate, date)}</td>
 			<td>{$date(:_takedate, modified)}</td>
@@ -374,7 +374,7 @@
 	<h1>Блоки на открытой странице</h1>
 	<div id="allblockslist"></div>
 	<script>
-		Event.one('Infrajs.onshow', function(){
+		Event.one('Controller.onshow', function(){
 			var list={ };
 			infrajs.run(infrajs.getAllLayers(),function(layer){
 				if(!layer.showed)return;
@@ -425,9 +425,9 @@
 		{:submit}Сохранить{:/submit}
 	{:/form}
 	<script type="text/javascript">
-		Event.one('Infrajs.oncheck', function(){
+		Event.one('Controller.oncheck', function(){
 
-			var layer=infrajs.getUnickLayer("{id}");
+			var layer=Controller.ids["{id}"];
 			var ta=$('#'+layer.div).find('textarea').get(0);
 			
 			var id="{config.id}";
