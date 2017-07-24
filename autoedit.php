@@ -690,7 +690,7 @@ if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
 		$parent = Path::pretty($parent);
 
 		$ans['oldfolder'] = $parent;//Папка в которой можно увидеть обрабатываемую папку
-		$ans['oldname'] = $name;
+		$ans['oldname'] = Path::toutf($name);
 
 		$ans['content'] = Load::loadTEXT($id);
 
