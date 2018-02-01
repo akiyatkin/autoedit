@@ -1,7 +1,6 @@
 {
 	"name": "infrajs/autoedit",
 	"description": "Autoedit for layers in infrajs",
-	"license": "GPL3",
 	"require":{
 		"vsn4ik/bootstrap-checkbox": "~1",
 		"infrajs/controller":"~1",
