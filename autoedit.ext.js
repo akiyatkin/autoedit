@@ -36,8 +36,7 @@ infrajs.autoedit_SaveOpenedWin=function(){
 
 Event.one('Controller.oninit',function(){
 	//autoedit
-	if (infra.admin(true)) infra.theme.prefix = 'infrajs=a&-nostore=true';//fix mod security
-	else  infra.theme.prefix = '';
+	if (Access.admin()) infra.theme.prefix = 'infrajs=a&-nostore=true';//fix mod security
 
 	infrajs.autoeditInit();	
 });
