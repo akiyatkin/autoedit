@@ -5,10 +5,10 @@
 		<input type="hidden" name="admin" value="{data.admin?:1?:0}">
 		
 		<div style="margin-bottom:10px">
-			<span class="label label-{data.admin?:danger?:success}">
+			<span class="badge badge-pill badge-{data.admin?:danger?:success}">
 				Вы {data.admin?:администратор?:обычный пользователь}
 			</span>&nbsp;
-			<span class="label label-warning" id="cachechecklabel">
+			<span class="badge badge-pill badge-warning" id="cachechecklabel">
 				проверка кэша...
 			</span>
 
