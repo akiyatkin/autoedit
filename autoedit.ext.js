@@ -6,14 +6,19 @@ infrajs.autoeditInit=function(){
 		if(!now)now=ext;
 		return now;
 	});
-	
-	$(document).bind('keydown',function(event){
-		if (event.keyCode == 113){
-			//infra.loader.show();
-			infra.require('-autoedit/autoedit.js');
-			AUTOEDIT('admin');
-		}
-	});
+	(async () => {
+		let Load = (await import('/vendor/akiyatkin/load/Load.js')).default
+		let CDN = await Load.on('import-default', '/vendor/akiyatkin/load/CDN.js')
+		await CDN.js('jquery')
+		
+		$(document).bind('keydown',function(event){
+			if (event.keyCode == 113){
+				//infra.loader.show();
+				infra.require('-autoedit/autoedit.js');
+				AUTOEDIT('admin');
+			}
+		});
+	})()
 }
 infrajs.autoeditLink=function(){//infrajs onshow
 	$('.showAdmin[showAdmin!=true]').attr('nohref','1').attr('showAdmin','true').click(function(){
