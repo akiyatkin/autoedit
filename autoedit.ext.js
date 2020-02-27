@@ -20,7 +20,10 @@ infrajs.autoeditInit=function(){
 		});
 	})()
 }
-infrajs.autoeditLink=function(){//infrajs onshow
+infrajs.autoeditLink = async () => { //infrajs onshow
+	let Load = (await import('/vendor/akiyatkin/load/Load.js')).default
+	let CDN = await Load.on('import-default', '/vendor/akiyatkin/load/CDN.js')
+	await CDN.js('jquery')
 	$('.showAdmin[showAdmin!=true]').attr('nohref','1').attr('showAdmin','true').click(function(){
 		infra.loader.show();
 		infra.require('-autoedit/autoedit.js');
