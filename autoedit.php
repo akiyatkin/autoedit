@@ -43,7 +43,7 @@ if (!Access::admin()) {
 }
 
 if (in_array($type, array('mvdir', 'mkdir', 'cpdir', 'rmdir'))) {
-	if ($id{0} != '~') {
+	if ($id[0] != '~') {
 		return Ans::err($ans, 'Путь должен начинаться с ~');
 	}
 
